@@ -17,14 +17,34 @@ typedef struct pcb {
 typedef PCB * PCB_p;
 
 /**
- * Sets a new priority for this PCB
+ * Sets a new priority for this PCB.
  */
-void setPriority(int * priority);
+void setPriority(PCB * pcb, int * priority);
 
 /**
- * Returns the value of the priority of this PCB
+ * Sets a new ID for this PCB.
+ */
+void setID(PCB * pcb, int * id);
+
+/**
+ * Sets a new Next value for this PCB.
+ */
+void setNext(PCB * pcb, int * next);
+
+/**
+ * Returns the value of the priority for this PCB.
  */
 int getPriority();
+
+/**
+ * Returns the value of the ID for this PCB.
+ */
+int getID();
+
+/**
+ * Returns the memory location for the next PCB.
+ */
+int *getNext();
 
 /**
  * Returns a string representation of this PCB.
