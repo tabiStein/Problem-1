@@ -7,17 +7,8 @@
  *      Author: Sean
  */
 #include <stdio.h>
+#include "FIFO.h"
 #include "pcb.h"
-
-
-typedef struct node {
-	PCB *myPcb;
-	struct node * next;
-} Node;
-
-typedef struct queue {
-	Node * head;
-}Queue;
 
 //node * head = NULL;
 
