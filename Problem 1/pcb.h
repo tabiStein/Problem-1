@@ -3,7 +3,7 @@
  *
  *  Created on: Jan 7, 2016
  *      Author: Sean
- *      Contributor: Abigail
+ *      Author: Abigail
  */
 
 #ifndef PCB_H_
@@ -12,7 +12,7 @@
 typedef struct pcb {
 	int priority;
 	int ID;
-	int next;
+	int * next;
 } PCB;
 typedef PCB * PCB_p;
 
@@ -49,11 +49,11 @@ int *getNext();
 /**
  * Returns a string representation of this PCB.
  */
-const char *toString();
+const char *toString(PCB * pcb);
 
 /**
- * Deallocates all memory references that are kept within this PCB.
+ * Deallocates all memory references that are kept within the PCB, and then frees the PCB passed in.
  */
-void Destroy();
+int *Destroy(PCB * pcb);
 
 #endif /* PCB_H_ */
