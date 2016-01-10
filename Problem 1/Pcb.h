@@ -9,11 +9,13 @@
 #ifndef PCB_H_
 #define PCB_H_
 
+/**
 typedef struct pcb {
 	int priority;
 	int ID;
-	int * next;
+	PCB * next;
 } PCB;
+*/
 typedef PCB * PCB_p;
 
 /**
@@ -29,22 +31,24 @@ void setID(PCB * pcb, int * id);
 /**
  * Sets a new Next value for this PCB.
  */
-void setNext(PCB * pcb, int * next);
+void setNext(PCB * pcb, PCB * next);
 
 /**
  * Returns the value of the priority for this PCB.
  */
-int getPriority();
+int getPriority(PCB * pcb);
 
 /**
  * Returns the value of the ID for this PCB.
  */
-int getID();
+int getID(PCB * pcb);
 
 /**
  * Returns the memory location for the next PCB.
  */
-int *getNext();
+PCB *getNext(PCB * pcb);
+
+PCB *newPCB();
 
 /**
  * Returns a string representation of this PCB.
