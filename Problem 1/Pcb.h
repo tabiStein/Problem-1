@@ -22,12 +22,12 @@ typedef PcbStr * PcbPtr;
 /**
  * Sets a new priority for this PCB.
  */
-void setPriority(PcbPtr pcb, int * priority);
+void setPriority(PcbPtr pcb, int priority);
 
 /**
  * Sets a new ID for this PCB.
  */
-void setID(PcbPtr pcb, int * id);
+void setID(PcbPtr pcb, int id);
 
 /**
  * Sets a new Next value for this PCB.
