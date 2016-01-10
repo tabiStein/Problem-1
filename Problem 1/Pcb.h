@@ -14,51 +14,51 @@ typedef struct pcb {
 	int priority;
 	int ID;
 	struct PCB * next;
-} PCB;
+} PcbStr;
 
 
-typedef struct PCB * PCB_p;
+typedef struct PcbStr * PcbPtr;
 
 /**
  * Sets a new priority for this PCB.
  */
-void setPriority(PCB_p pcb, int * priority);
+void setPriority(PcbPtr pcb, int * priority);
 
 /**
  * Sets a new ID for this PCB.
  */
-void setID(PCB_p pcb, int * id);
+void setID(PcbPtr pcb, int * id);
 
 /**
  * Sets a new Next value for this PCB.
  */
-void setNext(PCB_p pcb, struct PCB * next);
+void setNext(PcbPtr pcb, PcbPtr next);
 
 /**
  * Returns the value of the priority for this PCB.
  */
-int getPriority(PCB_p pcb);
+int getPriority(PcbPtr pcb);
 
 /**
  * Returns the value of the ID for this PCB.
  */
-int getID(PCB_p pcb);
+int getID(PcbPtr pcb);
 
 /**
  * Returns the memory location for the next PCB.
  */
-struct PCB *getNext(PCB_p pcb);
+struct PcbStr *getNext(PcbPtr pcb);
 
-struct PCB *newPCB();
+struct PcbStr *newPCB();
 
 /**
  * Returns a string representation of this PCB.
  */
-const char *toString(PCB_p pcb);
+const char *toString(PcbPtr pcb);
 
 /**
  * Deallocates all memory references that are kept within the PCB, and then frees the PCB passed in.
  */
-int *Destroy(PCB_p pcb);
+int *Destroy(PcbPtr pcb);
 
 #endif /* PCB_H_ */
