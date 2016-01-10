@@ -7,7 +7,7 @@
 
 #ifndef FIFO_H_
 #define FIFO_H_
-#include "pcb.h"
+#include "Pcb.h"
 
 /**
  * The queue ADT.
