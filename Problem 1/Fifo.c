@@ -90,7 +90,7 @@ char *fifoToString(fQ * queue) {
 		s[2] = '-';
 		strncat(string, s, 5);
 	}
-	PcbStr *curr = queue->head;
+	PcbStr *curr = queue->back;
 	strncat(string, toString(curr), 100);
 	return string;
 }
