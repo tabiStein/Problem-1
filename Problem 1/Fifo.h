@@ -11,39 +11,47 @@
 
 /**
  * The queue ADT.
- * Holds one PCB in each linked nodes or maybe just the linked PCBs
- * when I see what they look like
+ * Holds PcbStrs as the nodes.
  */
 typedef struct queue {
-	PCB * head;
-	PCB * back;
+	PcbStr * head;
+	PcbStr * back;
 	int size;
-}Queue;
+}fQ;
 
 /**
- * Pass in the queue and a pointer of the PCB to enqueue
+ * Returns pointer to a new empty Queue
  */
-void enqueueFifo(Queue *queue, PCB *pcb);
+fQ * createfQ();
 
 /**
- * Pass in a queue. Returns and dequeues the head PCB.
+ * Destroys Queue
  */
-PCB *dequeueFifo(Queue *queue);
+void destroyfQ(fQ * queue);
 
 /**
- * Returns a pointer to the head PCB
- * Should this just be a copy?
+ * Pass in the queue and a pointer of the PcbStr to enqueue
  */
-PCB *peekFifo(Queue * queue);
+void fifoEnqueue(fQ *queue, PcbStr *pcb);
+
+/**
+ * Pass in a queue. Returns and dequeues the head PcbStr.
+ */
+PcbStr *fifoDequeue(fQ *queue);
+
+/**
+ * Returns a pointer to the head PcbStr
+ */
+PcbStr *fifoPeek(fQ * queue);
 
 /**
  * Is it Empty?
  */
-int isEmptyFifo(Queue * queue);
+int fifoIsEmpty(fQ * queue);
 
 /**
- * Returns a formatted string of all PCBs and their content
+ * Returns a formatted string of all PcbStrs and their content
  */
-char * toStringQueue(Queue * queue);
+char * fifoToString(fQ * queue);
 
 #endif /* FIFO_H_ */
