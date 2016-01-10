@@ -5,42 +5,45 @@
  *      Author: Abigail
  */
 
-#include "pcb.h";
+#include "Pcb.h"
 #include <stdlib.h>
 #include <string.h>
 
+/*
 typedef struct {
 	int priority;
 	int ID;
-	PCB * next;
+	struct PCB * next;
 } PCB;
+*/
 
-void setPriority(PCB * pcb, int * priority) {
-	pcb->priority = *priority;
+void setPriority(PcbPtr pcb, int * priority) {
+	pcb->priority = priority;
+
 }
 
-void setID(PCB * pcb, int * id) {
+void setID(PcbPtr pcb, int * id) {
 	pcb->ID = *id;
 }
 
-void setNext(PCB * pcb, PCB * next) {
+void setNext(PcbPtr pcb, PcbPtr next) {
 	pcb->next = next;
 }
 
-int getPriority(PCB * pcb) {
+int getPriority(PcbPtr pcb) {
 	return pcb->priority;
 }
 
-int getID(PCB * pcb) {
+int getID(PcbPtr pcb) {
 	return pcb->ID;
 }
 
-PCB *getNext(PCB * pcb) {
+struct PcbStr *getNext(PcbPtr pcb) {
 	return pcb->next;
 }
 
-PCB *newPCB(){
-	PCB * pcb = malloc(sizeof(PCB));
+struct PcbStr *newPCB(){
+	PcbStr pcb = malloc(sizeof(PcbStr));
 	pcb->ID = NULL;
 	pcb->priority = NULL;
 	pcb->next = NULL;
@@ -48,18 +51,18 @@ PCB *newPCB(){
 	return pcb;
 }
 
-const char *toString(PCB * pcb) {
+const char *toString(PcbPtr pcb) {
 	char pcbString[6] = "ID: ";
 	strncat(pcbString, "%d", pcb->ID);
 	strncat(pcbString, "; Priority: ");
 	strncat(pcbString, "%d", pcb->priority);
 	strncat(pcbString, "; Next PCB ID: ");
-	strncat(pcbString, "%d", ((PCB *) pcb->next)->ID);
+	strncat(pcbString, "%d", ((PcbStr) pcb->next)->ID);
 
 	return &pcbString;
 }
 
-int *Destroy(PCB * pcb) {
+int *Destroy(PcbPtr pcb) {
 	int * nextPCB = pcb->next;
 
 	free (pcb->ID);
@@ -68,3 +71,23 @@ int *Destroy(PCB * pcb) {
 
 	return nextPCB;
 }
+
+/*
+int main() {
+	PCB * pcb1;
+	pcb1 = newPCB();
+	pcb1->ID = 123;
+	pcb1->priority = 3;
+
+	PCB * pcb2;
+	pcb2 = newPCB();
+	pcb2->ID = 456;
+	pcb2->priority = 5;
+
+	pcb1->next = pcb2;
+
+	printf("%s\n",toString(pcb1));
+
+	return 0;
+}
+*/
