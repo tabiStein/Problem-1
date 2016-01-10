@@ -10,14 +10,14 @@
 #define PCB_H_
 
 
-typedef struct pcb {
+typedef struct {
 	int priority;
 	int ID;
 	struct PCB * next;
 } PcbStr;
 
 
-typedef struct PcbStr * PcbPtr;
+typedef PcbStr * PcbPtr;
 
 /**
  * Sets a new priority for this PCB.
