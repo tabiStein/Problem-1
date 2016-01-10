@@ -7,8 +7,8 @@
  *      Author: Sean
  */
 #include <stdio.h>
-#include "FIFO.h"
-#include "pcb.h"
+#include "Fifo.h"
+#include "Pcb.h"
 
 //node * head = NULL;
 
