@@ -1,7 +1,7 @@
 // Author: Wing-Sea Poon
 
 #ifndef PRIORITY_QUEUE_H
-#def PRIORITY_QUEUE_H
+#define PRIORITY_QUEUE_H
 
 #include <stdbool.h>
 #include "Fifo.h"
@@ -12,30 +12,30 @@
 // Priority Queue ADT
 typedef struct 
 {
-	FIFO priorityArray[PRIORITY_LEVELS];
-} PriorityQStr;
-typedef PriorityQStr* PriorityQPtr;
+	FifoStr priorityArray[PRIORITY_LEVELS];
+} PQStr;
+typedef PQStr* PQPtr;
 
 // Allocates memory for a Priority Queue object.
-PriorityQPtr priorityQConstructor();
+PQPtr pqConstructor();
 
 // Deallocates memory for a Priority Queue object.
-void priorityQDestructor(PriorityQPtr this);
+void pqDestructor(PQPtr this);
 
 // Adds the PCB to the end of a FIFO queue based on the PCB's priority.
-void enqueue(PriorityQPtr this, PCB* pcb);
+void pqEnqueue(PQPtr this, PCB* pcb);
 
 // Removes and returns the PCB with the highest priority.
-PCB* dequeue(PriorityQPtr this);
+PcbPtr pqDequeue(PQPtr this);
 
 // Returns, without removing, the PCB with the highest priority.
-PCB* peek(PriorityQPtr this);
+PcbPtr pqPeek(PQPtr this);
 
 // Checks whether there are any PCBs in this priority queue.
-bool isEmpty(PriorityQPtr this);
+bool pqIsEmpty(PQPtr this);
 
 // Returns a string representation of this priority queue.
-char* toString(PriorityQPtr this);
+char* pqToString(PQPtr this);
 
 #endif
 
