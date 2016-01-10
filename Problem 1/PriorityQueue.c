@@ -7,28 +7,40 @@
  */
 
 
+// Author: Wing-Sea Poon
 #include <stdbool.h>
-#include <stdio.h>
+#include <string.h>
 
-#include "Priority_Queue.h"
-#include "FIFO.h"
-#include "pcb.h"
+#include "PriorityQueue.h"
+#include "Fifo.h"
+#include "Pcb.h"
 
-void enqueue(PCB* pcb)
+
+PriorityQPtr priorityQConstructor()
 {
-	priority_array[pcb.getPriority()].enqueue(&pcb);
+	
 }
 
-PCB* dequeue()
+void priorityQDestructor(PriorityQPtr this)
+{
+	
+}
+
+void enqueue(PriorityQPtr this, PCB* pcb)
+{
+	fifoEnqueue(this->priorityArray[pcb.priority], pcb);
+}
+
+PCB* dequeue(PriorityQPtr this)
 {
 	int i;
 	PCB* retval = NULL;
 	
 	for(i = 0; i < PRIORITY_LEVELS; i++)
 	{
-		if(priority_array[i] != NULL)
+		if(this->priorityArray[i] != NULL)
 		{
-			retval = priority_array[i].dequeue();
+			retval = fifoDequeue(this->priority_array[i]);
 			break;
 		}
 	}
@@ -36,26 +48,26 @@ PCB* dequeue()
 	return retval;
 }
 
-PCB* peek()
+PCB* peek(PriorityQPtr this)
 {
 	int i;
 	for(i = 0; i < PRIORITY_LEVELS; i++)
 	{
-		if(priority_array[i] != NULL)
+		if(this->priorityArray[i] != NULL)
 		{
-			return priority_array[i];
+			return priorityArray[i];
 		}
 	}
 	
 	return NULL;
 }
 
-bool isEmpty()
+bool isEmpty(PriorityQPtr this)
 {
 	int i;
 	for(i = 0; i < PRIORITY_LEVELS; i++)
 	{
-		if(priority_array[i] != NULL)
+		if(this->priorityArray[i] != NULL)
 		{
 			return false;
 		}
@@ -64,7 +76,8 @@ bool isEmpty()
 	return true;
 }
 
-char* toString()
+char* toString(PriorityQPtr this)
 {
 	
 }
+
