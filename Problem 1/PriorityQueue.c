@@ -6,8 +6,6 @@
  *      Author: Wing-Sea Poon
  */
 
-
-// Author: Wing-Sea Poon
 #include <stdbool.h>
 #include <string.h>
 
@@ -16,25 +14,47 @@
 #include "Pcb.h"
 
 
-PriorityQPtr priorityQConstructor()
+PQPtr pqConstructor()
 {
+	PQPtr pq = (PQPtr) malloc(sizeof(PQStr));
+	if(pq == NULL)
+	{
+		return NULL;
+	}
 	
-}
-
-void priorityQDestructor(PriorityQPtr this)
-{
+	int i;
+	for(i = 0; i < PRIORITY_LEVELS; i++)
+	{
+		pq->priorityArray[i] = NULL;
+	}
 	
+	return pq;
 }
 
-void enqueue(PriorityQPtr this, PCB* pcb)
-{
-	fifoEnqueue(this->priorityArray[pcb.priority], pcb);
-}
-
-PCB* dequeue(PriorityQPtr this)
+void pqDestructor(PQPtr this)
 {
 	int i;
-	PCB* retval = NULL;
+	for(i = 0; i < PRIORITY_LEVELS; i++)
+	{
+		if(this->priorityArray[i] != NULL)
+		{
+			fqDestructor(this->priorityArray[i]);
+		}
+	}
+	
+	free(this);
+	this = NULL;
+}
+
+void pqEnqueue(PQPtr this, PcbPtr pcb)
+{
+	fifoEnqueue(this->priorityArray[pcb->priority], pcb);
+}
+
+PcbPtr pqDequeue(PQPtr this)
+{
+	int i;
+	PcbPtr retval = NULL;
 	
 	for(i = 0; i < PRIORITY_LEVELS; i++)
 	{
@@ -48,7 +68,7 @@ PCB* dequeue(PriorityQPtr this)
 	return retval;
 }
 
-PCB* peek(PriorityQPtr this)
+PcbPtr pqPeek(PQPtr this)
 {
 	int i;
 	for(i = 0; i < PRIORITY_LEVELS; i++)
@@ -62,7 +82,7 @@ PCB* peek(PriorityQPtr this)
 	return NULL;
 }
 
-bool isEmpty(PriorityQPtr this)
+bool pqIsEmpty(PQPtr this)
 {
 	int i;
 	for(i = 0; i < PRIORITY_LEVELS; i++)
@@ -76,8 +96,9 @@ bool isEmpty(PriorityQPtr this)
 	return true;
 }
 
-char* toString(PriorityQPtr this)
+char* pqToString(PQPtr this)
 {
 	
 }
+
 
