@@ -23,7 +23,7 @@ PQPtr pqConstructor();
 void pqDestructor(PQPtr this);
 
 // Adds the PCB to the end of a FIFO queue based on the PCB's priority.
-void pqEnqueue(PQPtr this, PCB* pcb);
+void pqEnqueue(PQPtr this, PcbPtr pcb);
 
 // Removes and returns the PCB with the highest priority.
 PcbPtr pqDequeue(PQPtr this);
