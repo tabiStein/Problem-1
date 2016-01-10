@@ -98,7 +98,33 @@ bool pqIsEmpty(PQPtr this)
 
 char* pqToString(PQPtr this)
 {
+	char* result = NULL;
+	int bufferSize = 0;
 	
+	int i;
+	for(i = 0; i < PRIORITY_LEVELS; i++)
+	{
+		if(this->priorityArray[i] != NULL)
+		{
+			char* fifoString = fifoToString(this->priorityArray[i]);
+			int fifoLength = strlen(fifoString);
+			
+			if(result == NULL)
+			{
+				bufferSize = fifoLength + 1;
+				result = (char*) malloc(bufferSize);
+				strncpy(result, fifoString, fifoLength);
+			}
+			else
+			{
+				bufferSize += fifoLength;
+				result = (char*) realloc(result, bufferSize);
+				strncat(result, fifoString, fifoLength);
+			}
+		}
+	}
+	
+	return result;
 }
 
 
