@@ -50,6 +50,11 @@ PcbStr *fifoPeek(fQ * queue);
 int fifoIsEmpty(fQ * queue);
 
 /**
+ * sizeof(fQ)
+ */
+int fQSize();
+
+/**
  * Returns a formatted string of all PcbStrs and their content
  */
 char * fifoToString(fQ * queue);

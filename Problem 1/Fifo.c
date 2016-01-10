@@ -71,6 +71,10 @@ int fifoIsEmpty(fQ * queue) {
 	return (queue->head == NULL);
 }
 
+int fQSize() {
+	return sizeof(fQ);
+}
+
 char *fifoToString(fQ * queue) {
 	char * string = malloc(sizeof(char) * (queue->size * 4 + 50));
 	char w[5] = "Q: ";
