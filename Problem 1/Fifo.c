@@ -35,13 +35,13 @@ void fQDestructor(fQ * queue) {
 	}
 }
 
-void fifoEnqueue(fQ *queue, PcbStr * pcb) {
+void fifoEnqueue(fQ *queue, PcbStr* pcb) {
 	if (queue->head == NULL) {
 		queue->head = pcb;
 		queue->back = pcb;
 	}
 	else {
-		setNext(pcb, queue->back);
+		setNext(queue->back, pcb);
 		queue->back = queue->back->next;
 	}
 	(queue->size)++;
