@@ -32,7 +32,7 @@ void fQDestructor(fQ * queue);
 /**
  * Pass in the queue and a pointer of the PcbStr to enqueue
  */
-void fifoEnqueue(fQ *queue, PcbStr *pcb);
+void fifoEnqueue(fQ *queue, PcbStr * pcb);
 
 /**
  * Pass in a queue. Returns and dequeues the head PcbStr.

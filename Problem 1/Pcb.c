@@ -8,6 +8,7 @@
 #include "Pcb.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 /*
 typedef struct {
@@ -38,29 +39,38 @@ int getID(PcbPtr pcb) {
 	return pcb->ID;
 }
 
-struct PcbStr *getNext(PcbPtr pcb) {
+ PcbPtr getNext(PcbPtr pcb) {
 	return pcb->next;
 }
 
-struct PcbStr *newPCB(){
+ PcbPtr newPCB(){
 	PcbPtr pcb = (PcbPtr) malloc(sizeof(PcbStr));
-	pcb->ID = NULL;
-	pcb->priority = NULL;
+	pcb->ID = 1;
+	pcb->priority = 1;
 	pcb->next = NULL;
 
 	return pcb;
 }
 
-const char *toString(PcbPtr pcb) {
-	char pcbString[6] = "ID: ";
-	strncat(pcbString, "%d", pcb->ID);
-	strncat(pcbString, "; Priority: ", 10);
-	strncat(pcbString, "%d", pcb->priority);
-	strncat(pcbString, "; Next PCB ID: ", 15);
+char *toString(PcbPtr pcb) {
+	char * emptyStr = (char*) malloc(sizeof(char) * 100);
+	emptyStr[99] = '\0';
+	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, Next PCB ID: ", pcb->ID, pcb->priority);
 
-	//strncat(pcbString, "%d", ((PcbStr) pcb->next)->ID);
+	char * nextIDString = (char*)malloc(sizeof(char) * 5);
+	sprintf(nextIDString, "NULL");
 
-	return &pcbString;
+	if (pcb->next != NULL) {
+		nextIDString = (char *) malloc(sizeof(char) * 100);
+		sprintf(nextIDString, "%d", pcb->next->ID);
+	}
+	int addedLen = strlen(nextIDString);
+	char * retString = (char *) malloc(sizeof(char) * (lenNeeded + addedLen));
+	sprintf(retString, "%s %s", emptyStr, nextIDString);
+	free(emptyStr);
+	free(nextIDString);
+	return retString;
+
 }
 
 int *Destroy(PcbPtr pcb) {
@@ -91,4 +101,5 @@ int main() {
 
 	return 0;
 }
+
 */

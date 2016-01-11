@@ -10,7 +10,7 @@
 #define PCB_H_
 
 
-typedef struct {
+typedef struct PCB {
 	int priority;
 	int ID;
 	struct PCB * next;
@@ -47,14 +47,14 @@ int getID(PcbPtr pcb);
 /**
  * Returns the memory location for the next PCB.
  */
-struct PcbStr *getNext(PcbPtr pcb);
+PcbPtr getNext(PcbPtr pcb);
 
-struct PcbStr *newPCB();
+PcbPtr newPCB();
 
 /**
  * Returns a string representation of this PCB.
  */
-const char *toString(PcbPtr pcb);
+char *toString(PcbPtr pcb);
 
 /**
  * Deallocates all memory references that are kept within the PCB, and then frees the PCB passed in.
