@@ -25,7 +25,9 @@ PQPtr pqConstructor()
 	int i;
 	for(i = 0; i < PRIORITY_LEVELS; i++)
 	{
-		pq->priorityArray[i] = NULL;
+		fQ * fq = createfQ();   //MODIFIED
+		pq->priorityArray[i] = fq;
+		//pq->priorityArray[i] = NULL;
 	}
 	
 	return pq;
@@ -95,7 +97,36 @@ bool pqIsEmpty(PQPtr this)
 	
 	return true;
 }
+char* pqToString(PQPtr this)    //MODIFIED
+{
+	char* result = (char*) calloc(1000, sizeof(char));
+	int bufferSize = 0;
 
+	int qLabelLength = 10;
+	char * qLabel = (char*) calloc (10, sizeof(char));
+
+	int i;
+	for(i = 0; i < PRIORITY_LEVELS; i++)
+	{
+		sprintf(qLabel, "Q%d: ", i);
+		int labelLen = strlen(qLabel);
+		strncat(result, qLabel, labelLen);
+
+		PcbStr *fifoFirst = fifoPeek(this->priorityArray[i]);
+		if (fifoFirst != NULL)
+		{
+			char* fifoString = fifoToString(this->priorityArray[i]);
+			int fifoLength = strlen(fifoString);
+			int length = qLabelLength + fifoLength + 1; // +1 for \n at the end
+
+			strncat(result, fifoString, fifoLength);
+		}
+		strncat(result, "\n", 1);
+	}
+
+	return result;
+}
+ /*
 char* pqToString(PQPtr this)
 {
 	char* result = NULL;
@@ -139,5 +170,5 @@ char* pqToString(PQPtr this)
 	
 	return result;
 }
-
+*/
 
