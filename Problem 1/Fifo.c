@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Fifo.h"
-#include "pcb.h"
+#include "Pcb.h"
 #include <string.h>
 
 fQ * createfQ() {
@@ -77,19 +77,22 @@ int fQSize() {
 
 char *fifoToString(fQ * queue) {
 	char * string = malloc(sizeof(char) * (queue->size * 4 + 50));
-	char w[5] = "Q: ";
-	strncat(string, w, 5);
+	string[0]='\0';
+	strncat(string, "Q: ", 5);
+
 	if (queue->size == 0) {
 		strncat(string, "Empty", 6);
 		return string;
 	}
+
 	int i;
 	for (i = 1; i <= queue->size; i++) {
 		char s[5] = "P";
-		s[1] = i;
+		s[1] = '0' + i;
 		s[2] = '-';
 		strncat(string, s, 5);
 	}
+	strncat(string, "* : contents: ", 15);
 	PcbStr *curr = queue->back;
 	strncat(string, toString(curr), 100);
 	return string;
