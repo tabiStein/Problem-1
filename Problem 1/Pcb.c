@@ -43,7 +43,7 @@ struct PcbStr *getNext(PcbPtr pcb) {
 }
 
 struct PcbStr *newPCB(){
-	PcbStr pcb = malloc(sizeof(PcbStr));
+	PcbPtr pcb = (PcbPtr) malloc(sizeof(PcbStr));
 	pcb->ID = NULL;
 	pcb->priority = NULL;
 	pcb->next = NULL;
@@ -54,9 +54,10 @@ struct PcbStr *newPCB(){
 const char *toString(PcbPtr pcb) {
 	char pcbString[6] = "ID: ";
 	strncat(pcbString, "%d", pcb->ID);
-	strncat(pcbString, "; Priority: ");
+	strncat(pcbString, "; Priority: ", 10);
 	strncat(pcbString, "%d", pcb->priority);
-	strncat(pcbString, "; Next PCB ID: ");
+	strncat(pcbString, "; Next PCB ID: ", 15);
+
 	strncat(pcbString, "%d", ((PcbStr) pcb->next)->ID);
 
 	return &pcbString;
