@@ -17,13 +17,13 @@ typedef struct {
 } PCB;
 */
 
-void setPriority(PcbPtr pcb, int * priority) {
+void setPriority(PcbPtr pcb, int priority) {
 	pcb->priority = priority;
 
 }
 
-void setID(PcbPtr pcb, int * id) {
-	pcb->ID = *id;
+void setID(PcbPtr pcb, int id) {
+	pcb->ID = id;
 }
 
 void setNext(PcbPtr pcb, PcbPtr next) {
@@ -58,7 +58,7 @@ const char *toString(PcbPtr pcb) {
 	strncat(pcbString, "%d", pcb->priority);
 	strncat(pcbString, "; Next PCB ID: ", 15);
 
-	strncat(pcbString, "%d", ((PcbStr) pcb->next)->ID);
+	//strncat(pcbString, "%d", ((PcbStr) pcb->next)->ID);
 
 	return &pcbString;
 }

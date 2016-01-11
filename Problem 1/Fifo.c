@@ -19,7 +19,7 @@ fQ * createfQ() {
 	return newQueue;
 }
 
-void destroyfQ(fQ * queue) {
+void fQDestructor(fQ * queue) {
 	if (queue->head == NULL) {
 		if (queue->head == queue->back)
 			Destroy(queue->head);

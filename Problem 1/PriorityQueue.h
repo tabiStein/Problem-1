@@ -12,7 +12,7 @@
 // Priority Queue ADT
 typedef struct 
 {
-	FifoStr priorityArray[PRIORITY_LEVELS];
+	fQ * priorityArray[PRIORITY_LEVELS];
 } PQStr;
 typedef PQStr* PQPtr;
 

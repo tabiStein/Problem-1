@@ -27,7 +27,7 @@ fQ * createfQ();
 /**
  * Destroys Queue
  */
-void destroyfQ(fQ * queue);
+void fQDestructor(fQ * queue);
 
 /**
  * Pass in the queue and a pointer of the PcbStr to enqueue

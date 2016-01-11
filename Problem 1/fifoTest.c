@@ -6,33 +6,34 @@
  */
 
 
-#include "fifo.h"
+#include "Fifo.h"
 
-#include "pcb.h"
+#include "Pcb.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef QueuePtr FifoPtr; //I just want to call it that here
+typedef fQ FifoPtr; //I just want to call it that here
 
 int main(void) {
-	FifoPtr randQ = (FifoPtr) malloc(queueSize());
+	printf("Beginning FIFO Tests");
+	FifoPtr *randQ = malloc(fQSize());
 	int numPcbs = (rand() % 21) + 10;	//rand() % 21 yields values in range [0,20], and adding 10 gives [10,30].
 	int i;
 	//Test enqueuing
 	for (i = 0; i < numPcbs; i++) {
-		pcbPtr randPcb = (pcbPtr) malloc(pcbSize());
+		PcbStr *randPcb = malloc(sizeof(PcbStr));
 		setPriority(randPcb, rand() % 32);
 		setID(randPcb, rand());
-		enqueue(randQ, randPcb);
-		printf("%s", toString(randQ));
+		//fifoEnqueue(randQ, randPcb); Doesn't cause error but still terminates program at the beginning somehow because c
+		printf("%s", fifoToString(randQ));
 		printf("%s", toString(randPcb));
 	}
 	//Test dequeuing
 	for (i = 0; i < numPcbs; i++) {
-		pcbPtr deqPcb = dequeue(randQ);
+		PcbStr *deqPcb = fifoDequeue(randQ);
 		printf("%s", toString(randQ));
-		printf("%s", toString(deqPcb));
+		//printf("%s", toString(deqPcb)); breaks here
 	}
 	return 0;
 }

@@ -38,7 +38,7 @@ void pqDestructor(PQPtr this)
 	{
 		if(this->priorityArray[i] != NULL)
 		{
-			fqDestructor(this->priorityArray[i]);
+			fQDestructor(this->priorityArray[i]);
 		}
 	}
 	
@@ -60,7 +60,7 @@ PcbPtr pqDequeue(PQPtr this)
 	{
 		if(this->priorityArray[i] != NULL)
 		{
-			retval = fifoDequeue(this->priority_array[i]);
+			retval = fifoDequeue(this->priorityArray[i]);
 			break;
 		}
 	}
@@ -75,7 +75,7 @@ PcbPtr pqPeek(PQPtr this)
 	{
 		if(this->priorityArray[i] != NULL)
 		{
-			return priorityArray[i];
+			return this->priorityArray[i];
 		}
 	}
 	
