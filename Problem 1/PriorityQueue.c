@@ -101,26 +101,39 @@ char* pqToString(PQPtr this)
 	char* result = NULL;
 	int bufferSize = 0;
 	
+	int qLabelLength = 4;
+	char qLabel [qLabelLength];
+	qLabel[0] = 'Q';
+	// qLabel[1] will be the index i in the following loop
+	qLabel[2] = ':';
+	qLabel[3] = ' ';
+	
 	int i;
 	for(i = 0; i < PRIORITY_LEVELS; i++)
 	{
+		qLabel[1] = i;
+		
 		if(this->priorityArray[i] != NULL)
 		{
 			char* fifoString = fifoToString(this->priorityArray[i]);
 			int fifoLength = strlen(fifoString);
+			int length = qLabelLength + fifoLength + 1; // +1 for \n at the end
 			
 			if(result == NULL)
 			{
-				bufferSize = fifoLength + 1;
+				bufferSize = length + 1;	// +1 for \0 at the end
 				result = (char*) malloc(bufferSize);
-				strncpy(result, fifoString, fifoLength);
+				strncpy(result, qLabel, qLabelLength);
 			}
 			else
 			{
-				bufferSize += fifoLength;
+				bufferSize += length;
 				result = (char*) realloc(result, bufferSize);
-				strncat(result, fifoString, fifoLength);
+				strncat(result, qLabel, qLabelLength);
 			}
+			
+			strncat(result, fifoString, fifoLength);
+			strncat(result, "\n", 1);
 		}
 	}
 	
