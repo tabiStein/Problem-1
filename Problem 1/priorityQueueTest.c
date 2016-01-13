@@ -52,6 +52,9 @@ int main() {
         }
         printf("After dequeueing %d PCBs:\n%s\n\n", dequeue, pqToString(pQ));
     }
+    
+    pqDestructor(pQ);
+    
     return 0;
 }
 
