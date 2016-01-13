@@ -3,86 +3,121 @@
  * This is a a linked list ADT that acts as a queue.
  *
  *  Created on: Jan 6, 2016
- *      Author: Sean
+ *      Author: Sean Markus
+ *
+ * Reviewed by: Wing-Sea Poon
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include "Fifo.h"
-#include "pcb.h"
+#include "Pcb.h"
 #include <string.h>
 
-Queue * createQueue() {
-	Queue *newQueue = malloc(sizeof(Queue));
+fQ * createfQ() {
+	fQ *newQueue = (fQ*) malloc(sizeof(fQ));
 	newQueue->head = NULL;
 	newQueue->back = NULL;
 	newQueue->size = 0;
 	return newQueue;
 }
 
-void destroyQueue(Queue * queue) {
-	if (queue->head == NULL) {
+void fQDestructor(fQ * queue) {
+	/*
+	 * shouldn't this be if (queue->head != NULL) ??
+	 */
+	if (queue->head != NULL) {
 		if (queue->head == queue->back)
 			Destroy(queue->head);
-		PCB * curr = queue->head;
-		PCB * curr2 = queue->head->next;
-		while (curr2->next != queue->back) {
+		else {
+			PcbStr * curr = queue->head;
+			PcbStr * curr2 = queue->head->next;
+			while (curr2 != queue->back) {
+				Destroy(curr);
+				curr = curr2;
+				curr2 = curr2->next;
+			}
 			Destroy(curr);
-			curr = curr2;
-			curr2 = curr2->next;
+			Destroy(curr2);
 		}
 		queue->size = 0;
 		free(queue);
+		queue = NULL;
 	}
 }
 
-void fifoEnqueue(Queue *queue, PCB * pcb) {
+void fifoEnqueue(fQ *queue, PcbStr* pcb) {
+	if (pcb == NULL) {
+		printf("pcb is null");
+		return;
+	}
 	if (queue->head == NULL) {
 		queue->head = pcb;
 		queue->back = pcb;
 	}
+	else if (queue->head == queue->back) {
+		setNext(queue->head, pcb);
+		queue->back = pcb;
+	}
 	else {
-		setNext(pcb, queue->back);
+		setNext(queue->back, pcb);
 		queue->back = queue->back->next;
 	}
 	(queue->size)++;
 }
 
-PCB *fifoDequeue(Queue *queue) {
+
+PcbStr *fifoDequeue(fQ *queue) {
 	if (queue->head == NULL) {
 		printf("Queue is empty");
 		return NULL;
 	}
-	PCB * ret = queue->head;
+	PcbStr * ret = queue->head;
 	queue->head = queue->head->next;
 
 	(queue->size)--;
 	return ret;
 }
 
-PCB *peek(Queue * queue) {
+PcbPtr fifoPeek(fQ * queue) {
 	if (queue->head == NULL) {
-		printf("Queue is empty");
 		return NULL;
 	}
 	return queue->head;
 }
 
-char *toStringQueue(Queue * queue) {
-	char string = malloc(sizeof(char) * (queue->size * 4 + 50));
-	char w[5] = "Q: ";
-	strncat(string, w, 5);
+int fifoIsEmpty(fQ * queue) {
+	return (queue->head == NULL);
+}
+
+int fQSize() {
+	return sizeof(fQ);
+}
+
+char *fifoToString(fQ * queue) {
+	char * string = malloc(sizeof(char) * (queue->size * 4 + 50));
+	string[0]='\0';
+	strncat(string, "Q: ", 5);
+
 	if (queue->size == 0) {
 		strncat(string, "Empty", 6);
 		return string;
 	}
+
 	int i;
+	PcbStr *front = queue->head;
 	for (i = 1; i <= queue->size; i++) {
 		char s[5] = "P";
-		s[1] = i;
-		s[2] = '-';
+		int j = front->ID;
+		int numWritten = sprintf(s + 1, "%d", j); //For i > 9, we go into ascii vals above val for char '9'
+		s[numWritten + 1] = '-';
 		strncat(string, s, 5);
+		front = front->next;
 	}
-	PCB *curr = queue->head;
+	/*
+	strncat(string, "* : contents: ", 15);
+	PcbStr *curr = queue->back;
 	strncat(string, toString(curr), 100);
+	*/
 	return string;
 }
+
