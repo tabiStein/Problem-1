@@ -104,12 +104,14 @@ char *fifoToString(fQ * queue) {
 	}
 
 	int i;
+	PcbStr *front = queue->head;
 	for (i = 1; i <= queue->size; i++) {
 		char s[5] = "P";
-		//s[1] = '0' + i; //For i > 9, we go into ascii vals above val for char '9'
-		int numWritten = sprintf(s + 1, "%d", i);
+		int j = front->ID;
+		int numWritten = sprintf(s + 1, "%d", j); //For i > 9, we go into ascii vals above val for char '9'
 		s[numWritten + 1] = '-';
 		strncat(string, s, 5);
+		front = front->next;
 	}
 	strncat(string, "* : contents: ", 15);
 	//PcbStr *curr = queue->back;
