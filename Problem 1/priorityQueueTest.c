@@ -45,7 +45,6 @@ int main() {
         }
         //print out the priority queue so far
         printf("After enqueueing 10 PCBs:\n%s\n", pqToString(pQ));
-        //pause the program to take a screencap
 
         //dequeue 4 to 6 PCBs:
         int dequeue = (rand() % 3) + 4;
@@ -62,6 +61,10 @@ int main() {
             printf("A dequeued PCB: %s\n", toString(dpcb));
         }
         printf("After dequeueing %d PCBs:\n%s\n\n", dequeue, pqToString(pQ));
+           
+        //pause the program to take a screencap
+        printf("Continue test (type any character): ");
+        char userInput = getchar();
     }
     
     pqDestructor(pQ);
