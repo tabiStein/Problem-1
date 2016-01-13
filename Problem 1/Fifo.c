@@ -112,7 +112,7 @@ char *fifoToString(fQ * queue) {
 		strncat(string, s, 5);
 	}
 	strncat(string, "* : contents: ", 15);
-	PcbStr *curr = queue->back;
-	strncat(string, toString(curr), 100);
+	//PcbStr *curr = queue->back;
+	//strncat(string, toString(curr), 100);
 	return string;
 }

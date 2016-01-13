@@ -59,6 +59,6 @@ char *toString(PcbPtr pcb);
 /**
  * Deallocates all memory references that are kept within the PCB, and then frees the PCB passed in.
  */
-int *Destroy(PcbPtr pcb);
+PcbPtr Destroy(PcbPtr pcb);
 
 #endif /* PCB_H_ */

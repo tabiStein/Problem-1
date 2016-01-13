@@ -73,13 +73,13 @@ char *toString(PcbPtr pcb) {
 
 }
 
-int *Destroy(PcbPtr pcb) {
-	int * nextPCB = pcb->next;
+PcbPtr Destroy(PcbPtr pcb) {
+	PcbPtr nextPCB = pcb->next;
 
-	free (pcb->ID);
-	free (pcb->priority);
+	//free (pcb->ID);
+	//free (pcb->priority);
 	free (pcb);
-
+	pcb = NULL;
 	return nextPCB;
 }
 

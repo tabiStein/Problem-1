@@ -13,6 +13,8 @@
 #include "Fifo.h"
 #include "Pcb.h"
 
+#include <stdlib.h>
+#include <stdio.h>
 
 PQPtr pqConstructor()
 {
@@ -81,7 +83,7 @@ PcbPtr pqPeek(PQPtr this)
 	{
 		if(this->priorityArray[i] != NULL)
 		{
-			return this->priorityArray[i];
+			return fifoPeek(this->priorityArray[i]);
 		}
 	}
 	
@@ -115,6 +117,7 @@ char* pqToString(PQPtr this)    //MODIFIED
 		sprintf(qLabel, "Q%d: ", i);
 		int labelLen = strlen(qLabel);
 		strncat(result, qLabel, labelLen);
+		//free(qLabel);
 
 		PcbStr *fifoFirst = fifoPeek(this->priorityArray[i]);
 		if (fifoFirst != NULL)
@@ -127,6 +130,7 @@ char* pqToString(PQPtr this)    //MODIFIED
 		}
 		strncat(result, "\n", 1);
 	}
+	free(qLabel);
 
 	return result;
 }
