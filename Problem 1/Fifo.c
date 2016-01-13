@@ -4,7 +4,6 @@
  *
  *  Created on: Jan 6, 2016
  *      Author: Sean Markus
- * 
  * Reviewed by: Wing-Sea Poon
  */
 #include <stdio.h>
@@ -78,7 +77,8 @@ PcbStr *fifoDequeue(fQ *queue) {
 	return ret;
 }
 
-PcbStr *fifoPeek(fQ * queue) {
+
+PcbPtr fifoPeek(fQ * queue) {
 	if (queue->head == NULL) {
 		return NULL;
 	}
@@ -113,8 +113,12 @@ char *fifoToString(fQ * queue) {
 		strncat(string, s, 5);
 		front = front->next;
 	}
+
+	/*
 	strncat(string, "* : contents: ", 15);
-	//PcbStr *curr = queue->back;
-	//strncat(string, toString(curr), 100);
+	PcbStr *curr = queue->back;
+	strncat(string, toString(curr), 100);
+	*/
 	return string;
 }
+

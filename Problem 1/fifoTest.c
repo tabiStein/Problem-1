@@ -1,40 +1,40 @@
-///*
-// * fifoTest.c
-// *
-// *  Created on: Jan 9, 2016
-// *      Author: Tabi
-// */
-//
-//
-//#include "Fifo.h"
-//
-//#include "Pcb.h"
-//
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <time.h>
-//
-//
-//int main(void) {
-//	printf("Beginning FIFO Tests\n");
-//	srand( time(NULL) );
-//	fQ* randQ = (fQ*) malloc(fQSize());
-//	int numPcbs = (rand() % 21) + 10;	//rand() % 21 yields values in range [0,20], and adding 10 gives [10,30].
-//	int i;
-//	//Test enqueuing
-//	for (i = 0; i < numPcbs; i++) {
-//		PcbPtr randPcb = malloc(sizeof(PcbStr));
-//		setPriority(randPcb, rand() % 32);
-//		setID(randPcb, i);
-//		fifoEnqueue(randQ, randPcb); //Working now
-//		printf("%s\n", fifoToString(randQ)); //Instead of indices, I'm seeing funky characters for the fifo print string
-//	}
-//	printf("Beginning dequeueing Tests\n");
-//	//Test dequeuing
-//	for (i = 0; i < numPcbs; i++) {
-//		PcbPtr deqPcb = fifoDequeue(randQ);
-//		printf("%s", fifoToString(randQ));
-//		printf("\n");
-//	}
-//	return 0;
-//}
+/*
+ * fifoTest.c
+ *
+ *  Created on: Jan 9, 2016
+ *      Author: Tabi
+ */
+
+
+#include "Fifo.h"
+
+#include "Pcb.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+
+int main(void) {
+	printf("Beginning FIFO Tests\n");
+	srand( time(NULL) );
+	fQ* randQ = (fQ*) malloc(fQSize());
+	int numPcbs = (rand() % 21) + 10;	//rand() % 21 yields values in range [0,20], and adding 10 gives [10,30].
+	int i;
+	//Test enqueuing
+	for (i = 0; i < numPcbs; i++) {
+		PcbPtr randPcb = malloc(sizeof(PcbStr));
+		setPriority(randPcb, rand() % 32);
+		setID(randPcb, i);
+		fifoEnqueue(randQ, randPcb); //Working now
+		printf("%s\n", fifoToString(randQ)); //Instead of indices, I'm seeing funky characters for the fifo print string
+	}
+	printf("Beginning dequeueing Tests\n");
+	//Test dequeuing
+	for (i = 0; i < numPcbs; i++) {
+		PcbPtr deqPcb = fifoDequeue(randQ);
+		printf("%s", fifoToString(randQ));
+		printf("\n");
+	}
+	return 0;
+}

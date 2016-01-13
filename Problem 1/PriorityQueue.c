@@ -23,7 +23,6 @@ PQPtr pqConstructor()
 	{
 		return NULL;
 	}
-	
 	int i;
 	for(i = 0; i < PRIORITY_LEVELS; i++)
 	{
@@ -31,7 +30,7 @@ PQPtr pqConstructor()
 		pq->priorityArray[i] = fq;
 		//pq->priorityArray[i] = NULL;
 	}
-	
+
 	return pq;
 }
 
@@ -45,7 +44,6 @@ void pqDestructor(PQPtr this)
 			fQDestructor(this->priorityArray[i]);
 		}
 	}
-	
 	free(this);
 	this = NULL;
 }
@@ -59,7 +57,6 @@ PcbPtr pqDequeue(PQPtr this)
 {
 	int i;
 	PcbPtr retval = NULL;
-	
 	for(i = 0; i < PRIORITY_LEVELS; i++)
 	{
 		//++++++++++++MODIFIED START++++++++++++
@@ -72,7 +69,7 @@ PcbPtr pqDequeue(PQPtr this)
 			break;
 		}
 	}
-	
+
 	return retval;
 }
 
@@ -81,12 +78,17 @@ PcbPtr pqPeek(PQPtr this)
 	int i;
 	for(i = 0; i < PRIORITY_LEVELS; i++)
 	{
-		if(this->priorityArray[i] != NULL)
+		//if(this->priorityArray[i] != NULL)
+		//++++++++++++MODIFIED START++++++++++++
+	    	PcbStr *fifoFirst = fifoPeek(this->priorityArray[i]);
+		//if(this->priorityArray[i] != NULL)
+		if (fifoFirst != NULL)
+            	//++++++++++++MODIFIED END++++++++++++
 		{
+			//return this->priorityArray[i];
 			return fifoPeek(this->priorityArray[i]);
 		}
 	}
-	
 	return NULL;
 }
 
@@ -100,10 +102,10 @@ bool pqIsEmpty(PQPtr this)
 			return false;
 		}
 	}
-	
+
 	return true;
 }
-char* pqToString(PQPtr this)    //MODIFIED
+char* pqToString(PQPtr this)
 {
 	char* result = (char*) calloc(1000, sizeof(char));
 	int bufferSize = 0;
@@ -128,13 +130,17 @@ char* pqToString(PQPtr this)    //MODIFIED
 
 			strncat(result, fifoString, fifoLength);
 		}
-		strncat(result, "\n", 1);
+		//strncat(result, "\n", 1);
+		strncat(result, "*\n", 2);
 	}
 	free(qLabel);
 
 	return result;
 }
- /*
+
+
+
+/*
 char* pqToString(PQPtr this)
 {
 	char* result = NULL;
@@ -179,4 +185,3 @@ char* pqToString(PQPtr this)
 	return result;
 }
 */
-
