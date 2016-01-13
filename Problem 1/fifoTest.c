@@ -27,13 +27,15 @@ int main(void) {
 		setPriority(randPcb, rand() % 32);
 		setID(randPcb, i);
 		fifoEnqueue(randQ, randPcb); //Working now
-		printf("%s\n", fifoToString(randQ)); //Instead of indices, I'm seeing funky characters for the fifo print string
+		printf("%s", fifoToString(randQ));
+		printf("%s\n", toString(randPcb));
 	}
 	printf("Beginning dequeueing Tests\n");
 	//Test dequeuing
 	for (i = 0; i < numPcbs; i++) {
 		PcbPtr deqPcb = fifoDequeue(randQ);
 		printf("%s", fifoToString(randQ));
+		printf("%s", toString(deqPcb));
 		printf("\n");
 	}
 	return 0;

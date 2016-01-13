@@ -75,7 +75,6 @@ char *toString(PcbPtr pcb) {
 
 PcbPtr Destroy(PcbPtr pcb) {
 	PcbPtr nextPCB = pcb->next;
-
 	//free (pcb->ID);
 	//free (pcb->priority);
 	free (pcb);
