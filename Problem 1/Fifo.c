@@ -106,8 +106,9 @@ char *fifoToString(fQ * queue) {
 	int i;
 	for (i = 1; i <= queue->size; i++) {
 		char s[5] = "P";
-		s[1] = '0' + i;
-		s[2] = '-';
+		//s[1] = '0' + i; //For i > 9, we go into ascii vals above val for char '9'
+		int numWritten = sprintf(s + 1, "%d", i);
+		s[numWritten + 1] = '-';
 		strncat(string, s, 5);
 	}
 	strncat(string, "* : contents: ", 15);
