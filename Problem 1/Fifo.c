@@ -14,10 +14,7 @@
 #include <string.h>
 
 fQ * createfQ() {
-	/*
-	 * the right-hand side needs to be casted to fQ*
-	 */
-	fQ *newQueue = malloc(sizeof(fQ));
+	fQ *newQueue = (fQ*) malloc(sizeof(fQ));
 	newQueue->head = NULL;
 	newQueue->back = NULL;
 	newQueue->size = 0;
@@ -28,48 +25,46 @@ void fQDestructor(fQ * queue) {
 	/*
 	 * shouldn't this be if (queue->head != NULL) ??
 	 */
-	if (queue->head == NULL) {
+	if (queue->head != NULL) {
 		if (queue->head == queue->back)
 			Destroy(queue->head);
-		PcbStr * curr = queue->head;
-		PcbStr * curr2 = queue->head->next;
-		while (curr2->next != queue->back) {
+		else {
+			PcbStr * curr = queue->head;
+			PcbStr * curr2 = queue->head->next;
+			while (curr2 != queue->back) {
+				Destroy(curr);
+				curr = curr2;
+				curr2 = curr2->next;
+			}
 			Destroy(curr);
-			curr = curr2;
-			curr2 = curr2->next;
+			Destroy(curr2);
 		}
 		queue->size = 0;
 		free(queue);
-		/*
-		 * practice defensive programming by setting "queue = NULL;" after free
-		 */
+		queue = NULL;
 	}
 }
 
 void fifoEnqueue(fQ *queue, PcbStr* pcb) {
-	/*
-	 * There is a possible error here if whoever is using fifoEnqueue() does not call PCB's
-	 * constructor. Otherwise, this if-block should be fine.
-	 */
+	if (pcb == NULL) {
+		printf("pcb is null");
+		return;
+	}
 	if (queue->head == NULL) {
 		queue->head = pcb;
 		queue->back = pcb;
 	}
-	/*
-	 * I believe you're missing the case for when the size of the queue is 1; there should
-	 * be an if-else block here, because the case for 1 node should be handled differently
-	 * from the case when there are multiple nodes
-	 */
+	else if (queue->head == queue->back) {
+		setNext(queue->head, pcb);
+		queue->back = pcb;
+	}
 	else {
-		/*
-		 * I don't think you're saving the back node? This might cause you the "lose" the
-		 * rest of the list.
-		 */
 		setNext(queue->back, pcb);
 		queue->back = queue->back->next;
 	}
 	(queue->size)++;
 }
+
 
 PcbStr *fifoDequeue(fQ *queue) {
 	if (queue->head == NULL) {
@@ -85,7 +80,6 @@ PcbStr *fifoDequeue(fQ *queue) {
 
 PcbStr *fifoPeek(fQ * queue) {
 	if (queue->head == NULL) {
-		printf("Queue is empty");
 		return NULL;
 	}
 	return queue->head;
@@ -95,12 +89,6 @@ int fifoIsEmpty(fQ * queue) {
 	return (queue->head == NULL);
 }
 
-/*
- * Is this supposed to return the number of elements in the queue? If so, it should take a parameter
- * "fQ* this" and return this->size.
- * If this is supposed to return the amount of memory that an fQ takes up, then this function is
- * correct.
- */
 int fQSize() {
 	return sizeof(fQ);
 }
