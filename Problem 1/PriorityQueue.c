@@ -60,7 +60,11 @@ PcbPtr pqDequeue(PQPtr this)
 	
 	for(i = 0; i < PRIORITY_LEVELS; i++)
 	{
-		if(this->priorityArray[i] != NULL)
+		//++++++++++++MODIFIED START++++++++++++
+	    	PcbStr *fifoFirst = fifoPeek(this->priorityArray[i]);
+		//if(this->priorityArray[i] != NULL)
+		if (fifoFirst != NULL)
+            	//++++++++++++MODIFIED END++++++++++++
 		{
 			retval = fifoDequeue(this->priorityArray[i]);
 			break;
