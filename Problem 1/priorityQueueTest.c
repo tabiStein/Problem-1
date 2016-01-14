@@ -19,6 +19,7 @@
 
 
 int main() {
+	setvbuf(stdout, NULL, _IONBF, 0);
     PQPtr pQ = pqConstructor();
 
     //test isEmpty
@@ -64,7 +65,7 @@ int main() {
            
         //pause the program to take a screencap
         printf("Continue test (type any character): ");
-        char userInput = getchar();
+       // char userInput = getchar();
     }
 
     pqDestructor(pQ);
