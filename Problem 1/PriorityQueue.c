@@ -95,13 +95,14 @@ PcbPtr pqPeek(PQPtr this)
 bool pqIsEmpty(PQPtr this)
 {
 	int i;
-	//++++++++++++MODIFIED START++++++++++++
-        PcbStr *fifoFirst = fifoPeek(this->priorityArray[i]);
-	//if(this->priorityArray[i] != NULL)
-	if (fifoFirst != NULL)
-       	//++++++++++++MODIFIED END++++++++++++
+	for(i = 0; i < PRIORITY_LEVELS; i++)
 	{
-		if(this->priorityArray[i] != NULL)
+		//if(this->priorityArray[i] != NULL)
+		//++++++++++++MODIFIED START++++++++++++
+        	PcbStr *fifoFirst = fifoPeek(this->priorityArray[i]);
+		//if(this->priorityArray[i] != NULL)
+		if (fifoFirst != NULL)
+            	//++++++++++++MODIFIED END++++++++++++
 		{
 			return false;
 		}
