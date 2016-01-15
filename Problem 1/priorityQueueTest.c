@@ -36,8 +36,10 @@ int main() {
     PcbPtr pcb;
     int id = 1;
     int i;
+    char c = '\n';
     for (i = 0; i < 10; i++) {
-        int j;
+        c = '\n';
+    	int j;
         for (j = 0; j < 10; j++) {
             pcb = newPCB();
             setPriority(pcb, rand() % 16);
@@ -65,7 +67,9 @@ int main() {
 
         //pause the program to take a screencap
         printf("Continue test (type any character): ");
-        char c = getchar();
+        while ((c == EOF) || (c == '\n') || (c == '\r')) {
+        	c = getchar();
+        }
     }
 
     pqDestructor(pQ);
