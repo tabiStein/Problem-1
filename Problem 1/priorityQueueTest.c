@@ -62,10 +62,10 @@ int main() {
             printf("A dequeued PCB: %s\n", toString(dpcb));
         }
         printf("After dequeueing %d PCBs:\n%s\n\n", dequeue, pqToString(pQ));
-           
+
         //pause the program to take a screencap
         printf("Continue test (type any character): ");
-       // char userInput = getchar();
+        char c = getchar();
     }
 
     pqDestructor(pQ);

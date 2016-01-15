@@ -32,8 +32,8 @@
 //		printf("%s\n", toString(randPcb));
 //	}
 //
-//	getchar();
 //	printf("Press enter for dequeueing Tests\n");
+//	getchar();
 //	//Test dequeuing
 //	for (i = 0; i < numPcbs; i++) {
 //		PcbPtr deqPcb = fifoDequeue(randQ);
