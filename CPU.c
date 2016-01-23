@@ -19,7 +19,11 @@
 #include <time.h>
 #include "Pcb.h"
 #include "Fifo.h"
+
 #define TIMER 1
+#define NEW_PROCS 5
+#define PRIORITY_LEVELS 16
+#define MAX_ID 1000
 
 int sysStack;
 fQ* newProcesses;
@@ -40,8 +44,24 @@ void scheduler(int interruptType) {
 void timerIsr() {
 }
 
-/*Randomly generates between 0 and 5 new processes*/
+/*Randomly generates between 0 and 5 new processes and enqueues them to the New Processes Queue.*/
 void genProcesses() {
+	srand(time(NULL));
+	PcbPtr newProc;
+	
+	int i;
+	// rand() % NEW_PROCS will range from 0 to NEW_PROCS - 1, so we must use rand() % (NEW_PROCS + 1)
+	for(i = 0; i < rand() % (NEW_PROCS + 1); i++)
+	{
+		newProc = newPCB();	// Remember to call the destructor when finished using this
+		if(newProc != NULL)
+		{
+			setPriority(newProc, rand() % PRIORITY_LEVELS);
+			setID(newProc, rand() % MAX_ID);
+			//pcb_setState(newProc, CREATED);	// To be implemented
+			fifoEnqueue(newProcesses, newProc);
+		}
+	}
 }
 
 /*Writes the given string to the given file*/
@@ -50,6 +70,11 @@ void writeToFile(FILE* filePtr, char* string) {
 }
 
 int main(void) {
+	newProcesses = createfQ();
+	readyProcesses = createfQ();
+	terminatedProcesses = createfQ();
+	
+	genProcesses();
 	return 0;
 }
 
