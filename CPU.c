@@ -35,10 +35,10 @@ PcbPtr currProcess;
 void dispatcher() {
 	// Let me know if you think I've misinterpreted the directions (which is entirely possible) :)
 	
-	// pcb_setPC(currProcess, sysStackPC);										// To be implemented
+	// pcb_setPC(currProcess, sysStackPC);							// TO BE IMPLEMENTED
 	PcbPtr nextProc = fifoDequeue(readyProcesses);
-	// pcb_setState(nextProc, RUNNING);											// To be implemented
-	// sysStackPC = pcb_getPC(nextProc);										// To be implemented
+	// pcb_setState(nextProc, RUNNING);								// TO BE IMPLEMENTED
+	// sysStackPC = pcb_getPC(nextProc);							// TO BE IMPLEMENTED
 }
 
 /*Based on the type of interrupt indicated,
@@ -64,7 +64,7 @@ void genProcesses() {
 		{
 			setPriority(newProc, rand() % PRIORITY_LEVELS);
 			setID(newProc, rand() % MAX_ID);
-			//pcb_setState(newProc, CREATED);									// To be implemented
+			//pcb_setState(newProc, CREATED);						// TO BE IMPLEMENTED
 			fifoEnqueue(newProcesses, newProc);
 		}
 	}
