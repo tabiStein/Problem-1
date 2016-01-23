@@ -23,8 +23,8 @@
 #define TIMER 1
 #define NEW_PROCS 5
 #define PRIORITY_LEVELS 16
-#define MAX_ID 100000
 
+int currPID;
 int sysStackPC;		// Renamed for clarity. Let me know if you have any disagreements, so that we can talk about it :)
 fQ* newProcesses;
 fQ* readyProcesses;
@@ -62,12 +62,15 @@ void genProcesses() {
 		newProc = newPCB();
 		if(newProc != NULL)	// Remember to call the destructor when finished using newProc
 		{
+			currPID++;
+			setID(newProc, currPID);
 			setPriority(newProc, rand() % PRIORITY_LEVELS);
-			setID(newProc, rand() % MAX_ID);
 			//pcb_setState(newProc, CREATED);						// TO BE IMPLEMENTED
 			fifoEnqueue(newProcesses, newProc);
 		}
 	}
+	
+	printf("%s", fifoToString(newProcesses));
 }
 
 /*Writes the given string to the given file*/
@@ -79,6 +82,7 @@ int main(void) {
 	newProcesses = createfQ();
 	readyProcesses = createfQ();
 	terminatedProcesses = createfQ();
+	currPID = 0;
 	
 	/*
 	 * Fill in code here!! \(^o^)/
