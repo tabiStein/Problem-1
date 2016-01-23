@@ -35,10 +35,10 @@ PcbPtr currProcess;
 void dispatcher() {
 	// Let me know if you think I've misinterpreted the directions (which is entirely possible) :)
 	
-	// pcb_setPC(currProcess, sysStackPC);	// To be implemented
+	// pcb_setPC(currProcess, sysStackPC);										// To be implemented
 	PcbPtr nextProc = fifoDequeue(readyProcesses);
-	// pcb_setState(nextProc, RUNNING);		// To be implemented
-	// sysStackPC = pcb_getPC(nextProc);	// To be implemented
+	// pcb_setState(nextProc, RUNNING);											// To be implemented
+	// sysStackPC = pcb_getPC(nextProc);										// To be implemented
 }
 
 /*Based on the type of interrupt indicated,
@@ -59,12 +59,12 @@ void genProcesses() {
 	// rand() % NEW_PROCS will range from 0 to NEW_PROCS - 1, so we must use rand() % (NEW_PROCS + 1)
 	for(i = 0; i < rand() % (NEW_PROCS + 1); i++)
 	{
-		newProc = newPCB();	// Remember to call the destructor when finished using this
-		if(newProc != NULL)
+		newProc = newPCB();
+		if(newProc != NULL)	// Remember to call the destructor when finished using newProc
 		{
 			setPriority(newProc, rand() % PRIORITY_LEVELS);
 			setID(newProc, rand() % MAX_ID);
-			//pcb_setState(newProc, CREATED);	// To be implemented
+			//pcb_setState(newProc, CREATED);									// To be implemented
 			fifoEnqueue(newProcesses, newProc);
 		}
 	}
@@ -80,6 +80,13 @@ int main(void) {
 	readyProcesses = createfQ();
 	terminatedProcesses = createfQ();
 	
+	/*
+	 * Fill in code here!! \(^o^)/
+	 */
+	
+	fQDestructor(newProcesses);
+	fQDestructor(readyProcesses);
+	fQDestructor(terminatedProcesses);
 	return 0;
 }
 
