@@ -36,9 +36,9 @@ void dispatcher() {
 	// Let me know if you think I've misinterpreted the directions (which is entirely possible) :)
 	
 	// pcb_setPC(currProcess, sysStackPC);							// TO BE IMPLEMENTED
-	PcbPtr nextProc = fifoDequeue(readyProcesses);
-	// pcb_setState(nextProc, RUNNING);								// TO BE IMPLEMENTED
-	// sysStackPC = pcb_getPC(nextProc);							// TO BE IMPLEMENTED
+	currProcess = fifoDequeue(readyProcesses);
+	// pcb_setState(currProcess, RUNNING);							// TO BE IMPLEMENTED
+	// sysStackPC = pcb_getPC(currProcess);							// TO BE IMPLEMENTED
 }
 
 /*Based on the type of interrupt indicated,
