@@ -14,15 +14,18 @@
 *
 ************************************************************************************************/
 
-#include pcb.h
-#include FIFO.h
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "Pcb.h"
+#include "Fifo.h"
 #define TIMER 1
 
 int sysStack;
-FIFO newProcesses;
-FIFO readyProcesses;
-FIFO terminatedProcesses;
-PCB currProcess;
+fQ* newProcesses;
+fQ* readyProcesses;
+fQ* terminatedProcesses;
+PcbPtr currProcess;
 
 /*Prepares the waiting process to be executed.*/
 void dispatcher() {
@@ -38,7 +41,7 @@ void timerIsr() {
 }
 
 /*Randomly generates between 0 and 5 new processes*/
-void newProcesses() {
+void genProcesses() {
 }
 
 /*Writes the given string to the given file*/
@@ -47,6 +50,6 @@ void writeToFile(FILE* filePtr, char* string) {
 }
 
 int main(void) {
-  return 0;
+	return 0;
 }
 
