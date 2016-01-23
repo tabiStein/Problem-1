@@ -1,9 +1,18 @@
-/*
- * FIFO.h
- *
- *  Created on: Jan 7, 2016
- *      Author: Sean
- */
+/***********************************************************************************************
+* Fifo.h
+*
+* Programming Team:
+* Sean Markus
+* Wing-Sea Poon
+* Abigail Smith
+* Tabi Stein
+*
+* Date: 1/22/16
+*
+* Description:
+* This header file defines the class and methods for the FIFO Queue implementation.
+*
+************************************************************************************************/
 
 #ifndef FIFO_H_
 #define FIFO_H_

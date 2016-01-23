@@ -1,10 +1,18 @@
-/*
- * pcb.h
- *
- *  Created on: Jan 7, 2016
- *      Author: Sean
- *      Author: Abigail
- */
+/***********************************************************************************************
+* Pcb.h
+*
+* Programming Team:
+* Sean Markus
+* Wing-Sea Poon
+* Abigail Smith
+* Tabi Stein
+*
+* Date: 1/22/16
+*
+* Description:
+* This header file defines the class and methods for the process control block implementation.
+*
+************************************************************************************************/
 
 #ifndef PCB_H_
 #define PCB_H_
