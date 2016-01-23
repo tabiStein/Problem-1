@@ -69,8 +69,6 @@ void genProcesses() {
 			fifoEnqueue(newProcesses, newProc);
 		}
 	}
-	
-	printf("%s", fifoToString(newProcesses));
 }
 
 /*Writes the given string to the given file*/
