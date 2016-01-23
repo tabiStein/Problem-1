@@ -20,31 +20,58 @@
 #include "Pcb.h"
 #include <string.h>
 
-fQ * createfQ() {
-	fQ *newQueue = (fQ*) malloc(sizeof(fQ));
+Node * nodeConstructor() {
+	Node * newNode = (Node*) malloc(sizeof(Node));
+	newNode->content = NULL;
+	newNode->next = NULL;
+	return newNode;
+}
+
+Node * nodeDeconstructor(Node * node) {
+	Node *nextNode = node->next;
+
+	if (node->content != NULL) {
+		Destroy(node->content);
+	}
+	free (node);
+	node = NULL;
+
+	return nextNode;
+}
+
+void nodeSetNext(Node * node, Node * nextNode) {
+	node->next = nextNode;
+}
+
+fifoQueue * fifoQueueConstructor() {
+	fifoQueue *newQueue = (fifoQueue*) malloc(sizeof(fifoQueue));
 	newQueue->head = NULL;
 	newQueue->back = NULL;
 	newQueue->size = 0;
 	return newQueue;
 }
 
-void fQDestructor(fQ * queue) {
-	/*
-	 * shouldn't this be if (queue->head != NULL) ??
-	 */
+void fifoQueueDestructor(fifoQueue * queue) {
 	if (queue->head != NULL) {
-		if (queue->head == queue->back)
-			Destroy(queue->head);
+		if (queue->head->content == queue->back->content)
+			//Destroy(queue->head->content);
+			nodeDeconstructor(queue->head);
+
 		else {
-			PcbStr * curr = queue->head;
-			PcbStr * curr2 = queue->head->next;
+			Node * curr = queue->head;
+			Node * curr2 = queue->head->next;
+			//PcbStr * curr = queue->head;
+			//PcbStr * curr2 = queue->head->next;
 			while (curr2 != queue->back) {
-				Destroy(curr);
+				//Destroy(curr);
+				nodeDeconstructor(curr);
 				curr = curr2;
 				curr2 = curr2->next;
 			}
-			Destroy(curr);
-			Destroy(curr2);
+			nodeDeconstructor(curr);
+			nodeDeconstructor(curr2);
+			//Destroy(curr);
+			//Destroy(curr2);
 		}
 		queue->size = 0;
 		free(queue);
@@ -52,56 +79,63 @@ void fQDestructor(fQ * queue) {
 	}
 }
 
-void fifoEnqueue(fQ *queue, PcbStr* pcb) {
+void fifoQueueEnqueue(fifoQueue *queue, PcbStr* pcb) {
 	if (pcb == NULL) {
 		printf("pcb is null");
 		return;
 	}
+
+	Node * newNode = nodeConstructor();
+	newNode->content = pcb;
+
 	if (queue->head == NULL) {
-		queue->head = pcb;
-		queue->back = pcb;
+		queue->head = newNode;
+		queue->back = newNode;
 	}
 	else if (queue->head == queue->back) {
-		setNext(queue->head, pcb);
-		queue->back = pcb;
+		nodeSetNext(queue->head, newNode);
+		queue->back = newNode;
 	}
 	else {
-		setNext(queue->back, pcb);
+		nodeSetNext(queue->back, newNode);
 		queue->back = queue->back->next;
 	}
 	(queue->size)++;
 }
 
 
-PcbStr *fifoDequeue(fQ *queue) {
+PcbStr *fifoQueueDequeue(fifoQueue *queue) {
 	if (queue->head == NULL) {
 		printf("Queue is empty");
 		return NULL;
 	}
-	PcbStr * ret = queue->head;
+	PcbStr * ret = queue->head->content;
+
+	Node * toDestroy = queue->head;
 	queue->head = queue->head->next;
+	nodeDeconstructor(toDestroy);
 
 	(queue->size)--;
 	return ret;
 }
 
 
-PcbPtr fifoPeek(fQ * queue) {
+PcbPtr fifoQueuePeek(fifoQueue * queue) {
 	if (queue->head == NULL) {
 		return NULL;
 	}
-	return queue->head;
+	return queue->head->content;
 }
 
-int fifoIsEmpty(fQ * queue) {
+int fifoQueueIsEmpty(fifoQueue * queue) {
 	return (queue->head == NULL);
 }
 
-int fQSize() {
-	return sizeof(fQ);
+int fifoQueueSize() {
+	return sizeof(fifoQueue);
 }
 
-char *fifoToString(fQ * queue) {
+char *fifoQueueToString(fifoQueue * queue) {
 	char * string = malloc(sizeof(char) * (queue->size * 4 + 50));
 	string[0]='\0';
 	strncat(string, "Q: ", 5);
@@ -112,10 +146,10 @@ char *fifoToString(fQ * queue) {
 	}
 
 	int i;
-	PcbStr *front = queue->head;
+	Node *front = queue->head;
 	for (i = 1; i <= queue->size; i++) {
 		char s[5] = "P";
-		int j = front->ID;
+		int j = front->content->ID;
 		int numWritten = sprintf(s + 1, "%d", j); //For i > 9, we go into ascii vals above val for char '9'
 		s[numWritten + 1] = '-';
 		strncat(string, s, 5);
@@ -129,4 +163,5 @@ char *fifoToString(fQ * queue) {
 	*/
 	return string;
 }
+
 

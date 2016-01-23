@@ -19,53 +19,79 @@
 #include "Pcb.h"
 
 /**
+ * The Node ADT
+ * This holds a PCB as content,
+ * and contains a next pointer to the next node.
+ */
+typedef struct node {
+	PcbStr * content;
+	struct node * next;
+} Node;
+
+/**
+ * Allocates a space in memory for a node and returns a pointer to the newly constructed node.
+ */
+Node * nodeConstructor();
+
+/**
+ * Destroys this Node.
+ */
+Node * nodeDeconstructor(Node * node);
+
+/**
+ * Sets the "next" pointer in node to nextNode
+ */
+void nodeSetNext(Node * node, Node * nextNode);
+
+/**
  * The queue ADT.
- * Holds PcbStrs as the nodes.
+ * Holds node pointers for the head and back of the queue.
  */
 typedef struct queue {
-	PcbStr * head;
-	PcbStr * back;
+	Node * head;
+	Node * back;
 	int size;
-}fQ;
+}fifoQueue;
 
 /**
  * Returns pointer to a new empty Queue
  */
-fQ * createfQ();
+fifoQueue * fifoQueueConstructor();
 
 /**
  * Destroys Queue
  */
-void fQDestructor(fQ * queue);
+void fQDestructor(fifoQueue * queue);
 
 /**
  * Pass in the queue and a pointer of the PcbStr to enqueue
  */
-void fifoEnqueue(fQ *queue, PcbStr * pcb);
+void fifoEnqueue(fifoQueue *queue, PcbStr * pcb);
 
 /**
  * Pass in a queue. Returns and dequeues the head PcbStr.
  */
-PcbStr *fifoDequeue(fQ *queue);
+PcbStr *fifoDequeue(fifoQueue *queue);
 
 /**
  * Returns a pointer to the head PcbStr
  */
-PcbStr *fifoPeek(fQ * queue);
+PcbStr *fifoPeek(fifoQueue);
 
 /**
  * Is it Empty?
  */
-int fifoIsEmpty(fQ * queue);
+int fifoQueueIsEmpty(fifoQueue * queue);
 
 /**
- * sizeof(fQ)
+ * sizeof(fifoQueue)
  */
-int fQSize();
+int fifoQueueSize();
 
 /**
  * Returns a formatted string of all PcbStrs and their content
  */
-char * fifoToString(fQ * queue);
+char * fifoQueueToString(fifoQueue * queue);
 
 #endif /* FIFO_H_ */
+
