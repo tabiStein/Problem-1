@@ -1,3 +1,19 @@
+/***********************************************************************************************
+* CPU.c
+*
+* Programming Team:
+* Sean Markus
+* Wing-Sea Poon
+* Abigail Smith
+* Tabi Stein
+*
+* Date: 1/22/16
+*
+* Description:
+* This C file implements the class and methods for the CPU.
+*
+************************************************************************************************/
+
 #include pcb.h
 #include FIFO.h
 #define TIMER 1
@@ -6,7 +22,7 @@ int sysStack;
 FIFO newProcesses;
 FIFO readyProcesses;
 FIFO terminatedProcesses;
-PCB currProcesses;
+PCB currProcess;
 
 /*Prepares the waiting process to be executed.*/
 void dispatcher() {
