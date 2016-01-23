@@ -27,32 +27,46 @@ typedef struct {
 } PCB;
 */
 
-void setPriority(PcbPtr pcb, int priority) {
+void PCBSetPriority(PcbPtr pcb, int priority) {
 	pcb->priority = priority;
 
 }
 
-void setID(PcbPtr pcb, int id) {
+void PCBSetID(PcbPtr pcb, int id) {
 	pcb->ID = id;
 }
 
-void setNext(PcbPtr pcb, PcbPtr next) {
-	pcb->next = next;
+void PCBSetState(PcbPtr pcb, State newState) {
+	pcb->state = newState;
 }
 
-int getPriority(PcbPtr pcb) {
+/**
+ * Sets the PC for this PCB.
+ */
+void PCBSetState(PcbPtr pcb, unsigned int newPC) {
+	pcb->PC = newPC;
+}
+
+/**
+ * Returns PC of this PCB.
+ */
+unsigned int PCBGetPC(PcbPtr pcb) {
+	return pcb->PC;
+}
+
+int PCBGetPriority(PcbPtr pcb) {
 	return pcb->priority;
 }
 
-int getID(PcbPtr pcb) {
+int PCBGetID(PcbPtr pcb) {
 	return pcb->ID;
 }
 
- PcbPtr getNext(PcbPtr pcb) {
+ PcbPtr PCBGetNext(PcbPtr pcb) {
 	return pcb->next;
 }
 
- PcbPtr newPCB(){
+ PcbPtr PCBNew(){
 	PcbPtr pcb = (PcbPtr) malloc(sizeof(PcbStr));
 	pcb->ID = 1;
 	pcb->priority = 1;
@@ -61,7 +75,7 @@ int getID(PcbPtr pcb) {
 	return pcb;
 }
 
-char *toString(PcbPtr pcb) {
+char *PCBToString(PcbPtr pcb) {
 	char * emptyStr = (char*) malloc(sizeof(char) * 100);
 	emptyStr[99] = '\0';
 	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, Next PCB ID: ", pcb->ID, pcb->priority);
@@ -82,7 +96,7 @@ char *toString(PcbPtr pcb) {
 
 }
 
-PcbPtr Destroy(PcbPtr pcb) {
+PcbPtr PCBDestroy(PcbPtr pcb) {
 	PcbPtr nextPCB = pcb->next;
 	//free (pcb->ID);
 	//free (pcb->priority);

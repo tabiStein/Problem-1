@@ -17,11 +17,19 @@
 #ifndef PCB_H_
 #define PCB_H_
 
+typedef enum {
+	running,
+	ready,
+	interrupted,
+	blocked,
+	terminated
+} State;
 
 typedef struct PCB {
 	int priority;
+	unsigned int PC;
 	int ID;
-	struct PCB * next;
+	State state;
 } PcbStr;
 
 
@@ -30,43 +38,53 @@ typedef PcbStr * PcbPtr;
 /**
  * Sets a new priority for this PCB.
  */
-void setPriority(PcbPtr pcb, int priority);
+void PCBSetPriority(PcbPtr pcb, int priority);
 
 /**
  * Sets a new ID for this PCB.
  */
-void setID(PcbPtr pcb, int id);
+void PCBSetID(PcbPtr pcb, int id);
 
 /**
- * Sets a new Next value for this PCB.
+ * Sets the state for this PCB.
  */
-void setNext(PcbPtr pcb, PcbPtr next);
+void PCBSetState(PcbPtr pcb, State newState);
+
+/**
+ * Sets the PC for this PCB.
+ */
+void PCBSetState(PcbPtr pcb, unsigned int newPC);
+
+/**
+ * Returns PC of this PCB.
+ */
+unsigned int PCBGetPC(PcbPtr pcb);
 
 /**
  * Returns the value of the priority for this PCB.
  */
-int getPriority(PcbPtr pcb);
+int PCBGetPriority(PcbPtr pcb);
 
 /**
  * Returns the value of the ID for this PCB.
  */
-int getID(PcbPtr pcb);
+int PCBGetID(PcbPtr pcb);
 
 /**
- * Returns the memory location for the next PCB.
+ * Returns the state of this PCB.
  */
-PcbPtr getNext(PcbPtr pcb);
+PcbPtr PCBGetState(PcbPtr pcb);
 
-PcbPtr newPCB();
+PcbPtr PCBNew();
 
 /**
  * Returns a string representation of this PCB.
  */
-char *toString(PcbPtr pcb);
+char *PCBToString(PcbPtr pcb);
 
 /**
  * Deallocates all memory references that are kept within the PCB, and then frees the PCB passed in.
  */
-PcbPtr Destroy(PcbPtr pcb);
+PcbPtr PCBDestroy(PcbPtr pcb);
 
 #endif /* PCB_H_ */
