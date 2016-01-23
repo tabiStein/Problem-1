@@ -23,9 +23,9 @@
 #define TIMER 1
 #define NEW_PROCS 5
 #define PRIORITY_LEVELS 16
-#define MAX_ID 1000
+#define MAX_ID 100000
 
-int sysStack;
+int sysStackPC;		// Renamed for clarity. Let me know if you have any disagreements, so that we can talk about it :)
 fQ* newProcesses;
 fQ* readyProcesses;
 fQ* terminatedProcesses;
@@ -33,6 +33,12 @@ PcbPtr currProcess;
 
 /*Prepares the waiting process to be executed.*/
 void dispatcher() {
+	// Let me know if you think I've misinterpreted the directions (which is entirely possible) :)
+	
+	// pcb_setPC(currProcess, sysStackPC);	// To be implemented
+	PcbPtr nextProc = fifoDequeue(readyProcesses);
+	// pcb_setState(nextProc, RUNNING);		// To be implemented
+	// sysStackPC = pcb_getPC(nextProc);	// To be implemented
 }
 
 /*Based on the type of interrupt indicated,
@@ -74,7 +80,6 @@ int main(void) {
 	readyProcesses = createfQ();
 	terminatedProcesses = createfQ();
 	
-	genProcesses();
 	return 0;
 }
 
