@@ -18,6 +18,7 @@
 #define PCB_H_
 
 typedef enum {
+	created,
 	running,
 	ready,
 	interrupted,
@@ -85,6 +86,6 @@ char *PCBToString(PcbPtr pcb);
 /**
  * Deallocates all memory references that are kept within the PCB, and then frees the PCB passed in.
  */
-PcbPtr PCBDestroy(PcbPtr pcb);
+void PCBDestroy(PcbPtr pcb);
 
 #endif /* PCB_H_ */

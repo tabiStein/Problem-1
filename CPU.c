@@ -26,9 +26,9 @@
 
 int currPID;
 int sysStackPC;		// Renamed for clarity. Let me know if you have any disagreements, so that we can talk about it :)
-fQ* newProcesses;
-fQ* readyProcesses;
-fQ* terminatedProcesses;
+fifoQueue* newProcesses;
+fifoQueue* readyProcesses;
+fifoQueue* terminatedProcesses;
 PcbPtr currProcess;
 
 /*Prepares the waiting process to be executed.*/
@@ -36,7 +36,7 @@ void dispatcher() {
 	// Let me know if you think I've misinterpreted the directions (which is entirely possible) :)
 	
 	// pcb_setPC(currProcess, sysStackPC);							// TO BE IMPLEMENTED
-	currProcess = fifoDequeue(readyProcesses);
+	currProcess = fifoQueueDequeue(readyProcesses);
 	// pcb_setState(currProcess, RUNNING);							// TO BE IMPLEMENTED
 	// sysStackPC = pcb_getPC(currProcess);							// TO BE IMPLEMENTED
 }
@@ -59,14 +59,14 @@ void genProcesses() {
 	// rand() % NEW_PROCS will range from 0 to NEW_PROCS - 1, so we must use rand() % (NEW_PROCS + 1)
 	for(i = 0; i < rand() % (NEW_PROCS + 1); i++)
 	{
-		newProc = newPCB();
+		newProc = PCBNew();
 		if(newProc != NULL)	// Remember to call the destructor when finished using newProc
 		{
 			currPID++;
-			setID(newProc, currPID);
-			setPriority(newProc, rand() % PRIORITY_LEVELS);
+			PCBSetID(newProc, currPID);
+			PCBSetPriority(newProc, rand() % PRIORITY_LEVELS);
 			//pcb_setState(newProc, CREATED);						// TO BE IMPLEMENTED
-			fifoEnqueue(newProcesses, newProc);
+			fifoQueueEnqueue(newProcesses, newProc);
 		}
 	}
 }
@@ -77,18 +77,19 @@ void writeToFile(FILE* filePtr, char* string) {
 }
 
 int main(void) {
-	newProcesses = createfQ();
-	readyProcesses = createfQ();
-	terminatedProcesses = createfQ();
+	newProcesses = fifoQueueConstructor();
+	readyProcesses = fifoQueueConstructor();
+	terminatedProcesses = fifoQueueConstructor();
 	currPID = 0;
 	
 	/*
 	 * Fill in code here!! \(^o^)/
 	 */
 	
-	fQDestructor(newProcesses);
-	fQDestructor(readyProcesses);
-	fQDestructor(terminatedProcesses);
+	fifoQueueDestructor(newProcesses);
+	fifoQueueDestructor(readyProcesses);
+	fifoQueueDestructor(terminatedProcesses);
+	printf("Done");
 	return 0;
 }
 

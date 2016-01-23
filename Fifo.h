@@ -61,22 +61,22 @@ fifoQueue * fifoQueueConstructor();
 /**
  * Destroys Queue
  */
-void fQDestructor(fifoQueue * queue);
+void fifoQueueDestructor(fifoQueue * queue);
 
 /**
  * Pass in the queue and a pointer of the PcbStr to enqueue
  */
-void fifoEnqueue(fifoQueue *queue, PcbStr * pcb);
+void fifoQueueEnqueue(fifoQueue *queue, PcbStr * pcb);
 
 /**
  * Pass in a queue. Returns and dequeues the head PcbStr.
  */
-PcbStr *fifoDequeue(fifoQueue *queue);
+PcbStr *fifoQueueDequeue(fifoQueue *queue);
 
 /**
  * Returns a pointer to the head PcbStr
  */
-PcbStr *fifoPeek(fifoQueue);
+PcbStr *fifoQueuePeek(fifoQueue * queue);
 
 /**
  * Is it Empty?

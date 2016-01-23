@@ -43,7 +43,7 @@ void PCBSetState(PcbPtr pcb, State newState) {
 /**
  * Sets the PC for this PCB.
  */
-void PCBSetState(PcbPtr pcb, unsigned int newPC) {
+void PCBSetPC(PcbPtr pcb, unsigned int newPC) {
 	pcb->PC = newPC;
 }
 
@@ -62,15 +62,11 @@ int PCBGetID(PcbPtr pcb) {
 	return pcb->ID;
 }
 
- PcbPtr PCBGetNext(PcbPtr pcb) {
-	return pcb->next;
-}
-
  PcbPtr PCBNew(){
 	PcbPtr pcb = (PcbPtr) malloc(sizeof(PcbStr));
 	pcb->ID = 1;
 	pcb->priority = 1;
-	pcb->next = NULL;
+	pcb->state = ready;
 
 	return pcb;
 }
@@ -83,10 +79,9 @@ char *PCBToString(PcbPtr pcb) {
 	char * nextIDString = (char*)malloc(sizeof(char) * 5);
 	sprintf(nextIDString, "NULL");
 
-	if (pcb->next != NULL) {
-		nextIDString = (char *) malloc(sizeof(char) * 100);
-		sprintf(nextIDString, "%d", pcb->next->ID);
-	}
+	nextIDString = (char *) malloc(sizeof(char) * 100);
+	sprintf(nextIDString, "%d", pcb->state);
+
 	int addedLen = strlen(nextIDString);
 	char * retString = (char *) malloc(sizeof(char) * (lenNeeded + addedLen));
 	sprintf(retString, "%s %s", emptyStr, nextIDString);
@@ -96,13 +91,11 @@ char *PCBToString(PcbPtr pcb) {
 
 }
 
-PcbPtr PCBDestroy(PcbPtr pcb) {
-	PcbPtr nextPCB = pcb->next;
+void PCBDestroy(PcbPtr pcb) {
 	//free (pcb->ID);
 	//free (pcb->priority);
 	free (pcb);
 	pcb = NULL;
-	return nextPCB;
 }
 
 /*
