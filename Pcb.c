@@ -62,6 +62,10 @@ int PCBGetID(PcbPtr pcb) {
 	return pcb->ID;
 }
 
+State PCBGetState(PcbPtr pcb) {
+	return pcb->state;
+}
+
  PcbPtr PCBNew(){
 	PcbPtr pcb = (PcbPtr) malloc(sizeof(PcbStr));
 	pcb->ID = 1;

@@ -54,7 +54,7 @@ void PCBSetState(PcbPtr pcb, State newState);
 /**
  * Sets the PC for this PCB.
  */
-void PCBSetState(PcbPtr pcb, unsigned int newPC);
+void PCBSetPC(PcbPtr pcb, unsigned int newPC);
 
 /**
  * Returns PC of this PCB.
@@ -74,7 +74,7 @@ int PCBGetID(PcbPtr pcb);
 /**
  * Returns the state of this PCB.
  */
-PcbPtr PCBGetState(PcbPtr pcb);
+State PCBGetState(PcbPtr pcb);
 
 PcbPtr PCBNew();
 
