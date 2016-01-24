@@ -34,9 +34,9 @@ typedef struct node {
 Node * nodeConstructor();
 
 /**
- * Destroys this Node.
+ * Destroys this Node and returns a pointer to what it contained.
  */
-Node * nodeDeconstructor(Node * node);
+PcbPtr nodeDestructor(Node ** node) ;
 
 /**
  * Sets the "next" pointer in node to nextNode
@@ -51,37 +51,37 @@ typedef struct queue {
 	Node * head;
 	Node * back;
 	int size;
-}fifoQueue;
+}FifoQueue;
 
 /**
  * Returns pointer to a new empty Queue
  */
-fifoQueue * fifoQueueConstructor();
+FifoQueue * fifoQueueConstructor();
 
 /**
  * Destroys Queue
  */
-void fifoQueueDestructor(fifoQueue * queue);
+void fifoQueueDestructor(FifoQueue ** queue);
 
 /**
  * Pass in the queue and a pointer of the PcbStr to enqueue
  */
-void fifoQueueEnqueue(fifoQueue *queue, PcbStr * pcb);
+void fifoQueueEnqueue(FifoQueue *queue, PcbStr * pcb);
 
 /**
  * Pass in a queue. Returns and dequeues the head PcbStr.
  */
-PcbStr *fifoQueueDequeue(fifoQueue *queue);
+PcbPtr fifoQueueDequeue(FifoQueue *queue);
 
 /**
  * Returns a pointer to the head PcbStr
  */
-PcbStr *fifoQueuePeek(fifoQueue * queue);
+PcbStr *fifoQueuePeek(FifoQueue * queue);
 
 /**
  * Is it Empty?
  */
-int fifoQueueIsEmpty(fifoQueue * queue);
+int fifoQueueIsEmpty(FifoQueue * queue);
 
 /**
  * sizeof(fifoQueue)
@@ -91,7 +91,7 @@ int fifoQueueSize();
 /**
  * Returns a formatted string of all PcbStrs and their content
  */
-char * fifoQueueToString(fifoQueue * queue);
+char * fifoQueueToString(FifoQueue * queue);
 
 #endif /* FIFO_H_ */
 
