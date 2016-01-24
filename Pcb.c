@@ -27,41 +27,51 @@ typedef struct {
 } PCB;
 */
 
-void setPriority(PcbPtr pcb, int priority) {
+void PCBSetPriority(PcbPtr pcb, int priority) {
 	pcb->priority = priority;
 
 }
 
-void setID(PcbPtr pcb, int id) {
+void PCBSetID(PcbPtr pcb, int id) {
 	pcb->ID = id;
 }
 
-void setNext(PcbPtr pcb, PcbPtr next) {
-	pcb->next = next;
+void PCBSetState(PcbPtr pcb, State newState) {
+	pcb->state = newState;
 }
 
-int getPriority(PcbPtr pcb) {
+/**
+ * Sets the PC for this PCB.
+ */
+void PCBSetPC(PcbPtr pcb, unsigned int newPC) {
+	pcb->PC = newPC;
+}
+
+/**
+ * Returns PC of this PCB.
+ */
+unsigned int PCBGetPC(PcbPtr pcb) {
+	return pcb->PC;
+}
+
+int PCBGetPriority(PcbPtr pcb) {
 	return pcb->priority;
 }
 
-int getID(PcbPtr pcb) {
+int PCBGetID(PcbPtr pcb) {
 	return pcb->ID;
 }
 
- PcbPtr getNext(PcbPtr pcb) {
-	return pcb->next;
-}
-
- PcbPtr newPCB(){
+ PcbPtr PCBNew(){
 	PcbPtr pcb = (PcbPtr) malloc(sizeof(PcbStr));
 	pcb->ID = 1;
 	pcb->priority = 1;
-	pcb->next = NULL;
+	pcb->state = ready;
 
 	return pcb;
 }
 
-char *toString(PcbPtr pcb) {
+char *PCBToString(PcbPtr pcb) {
 	char * emptyStr = (char*) malloc(sizeof(char) * 100);
 	emptyStr[99] = '\0';
 	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, Next PCB ID: ", pcb->ID, pcb->priority);
@@ -69,10 +79,9 @@ char *toString(PcbPtr pcb) {
 	char * nextIDString = (char*)malloc(sizeof(char) * 5);
 	sprintf(nextIDString, "NULL");
 
-	if (pcb->next != NULL) {
-		nextIDString = (char *) malloc(sizeof(char) * 100);
-		sprintf(nextIDString, "%d", pcb->next->ID);
-	}
+	nextIDString = (char *) malloc(sizeof(char) * 100);
+	sprintf(nextIDString, "%d", pcb->state);
+
 	int addedLen = strlen(nextIDString);
 	char * retString = (char *) malloc(sizeof(char) * (lenNeeded + addedLen));
 	sprintf(retString, "%s %s", emptyStr, nextIDString);
@@ -82,13 +91,11 @@ char *toString(PcbPtr pcb) {
 
 }
 
-PcbPtr Destroy(PcbPtr pcb) {
-	PcbPtr nextPCB = pcb->next;
+void PCBDestroy(PcbPtr pcb) {
 	//free (pcb->ID);
 	//free (pcb->priority);
 	free (pcb);
 	pcb = NULL;
-	return nextPCB;
 }
 
 /*

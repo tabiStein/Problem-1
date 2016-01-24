@@ -31,7 +31,7 @@ Node * nodeDeconstructor(Node * node) {
 	Node *nextNode = node->next;
 
 	if (node->content != NULL) {
-		Destroy(node->content);
+		PCBDestroy(node->content);
 	}
 	free (node);
 	node = NULL;
