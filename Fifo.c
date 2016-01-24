@@ -20,21 +20,22 @@
 #include "Pcb.h"
 #include <string.h>
 
-Node * nodeConstructor() {
+Node* nodeConstructor() {
 	Node * newNode = (Node*) malloc(sizeof(Node));
 	newNode->content = NULL;
 	newNode->next = NULL;
 	return newNode;
 }
 
-Node * nodeDeconstructor(Node * node) {
-	Node *nextNode = node->next;
+/*Accepts a double pointer to a Node, so the caller's Node pointer can be set to NULL.
+ *Assumes that the caller will handle deallocating the contents of the Node, in case
+ *there is still work to do with the contents.*/
+PcbPtr nodeDestructor(Node ** node) {
+	PcbPtr contents = (*node)->content;
+	Node*nextNode = (*node)->next;
 
-	if (node->content != NULL) {
-		PCBDestroy(node->content);
-	}
-	free (node);
-	node = NULL;
+	free (*node);
+	*node = NULL; //Sets dangling pointer in calling function to NULL
 
 	return nextNode;
 }
@@ -43,43 +44,43 @@ void nodeSetNext(Node * node, Node * nextNode) {
 	node->next = nextNode;
 }
 
-fifoQueue * fifoQueueConstructor() {
-	fifoQueue *newQueue = (fifoQueue*) malloc(sizeof(fifoQueue));
+FifoQueue * fifoQueueConstructor() {
+	FifoQueue* newQueue = (FifoQueue*) malloc(sizeof(FifoQueue));
 	newQueue->head = NULL;
 	newQueue->back = NULL;
 	newQueue->size = 0;
 	return newQueue;
 }
 
-void fifoQueueDestructor(fifoQueue * queue) {
-	if (queue->head != NULL) {
-		if (queue->head->content == queue->back->content)
-			//Destroy(queue->head->content);
-			nodeDeconstructor(queue->head);
+void fifoQueueDestructor(FifoQueue ** queue_p) {
+	if ((*queue_p)->head != NULL) {
+		if ((*queue_p)->head->content == (*queue_p)->back->content)
+			//Pass a pointer to the head Node in the queue that queue_p points to:
+			nodeDestructor(&((*queue_p)->head));
 
 		else {
-			Node * curr = queue->head;
-			Node * curr2 = queue->head->next;
+			Node * curr = (*queue_p)->head;
+			Node * curr2 = (*queue_p)->head->next;
 			//PcbStr * curr = queue->head;
 			//PcbStr * curr2 = queue->head->next;
-			while (curr2 != queue->back) {
+			while (curr2 != (*queue_p)->back) {
 				//Destroy(curr);
-				nodeDeconstructor(curr);
+				nodeDestructor(&curr);
 				curr = curr2;
 				curr2 = curr2->next;
 			}
-			nodeDeconstructor(curr);
-			nodeDeconstructor(curr2);
+			nodeDestructor(&curr);
+			nodeDestructor(&curr2);
 			//Destroy(curr);
 			//Destroy(curr2);
 		}
-		queue->size = 0;
-		free(queue);
-		queue = NULL;
+		(*queue_p)->size = 0;
+		free(*queue_p);
+		*queue_p = NULL; //Only local
 	}
 }
 
-void fifoQueueEnqueue(fifoQueue *queue, PcbStr* pcb) {
+void fifoQueueEnqueue(FifoQueue *queue, PcbStr* pcb) {
 	if (pcb == NULL) {
 		printf("pcb is null");
 		return;
@@ -100,42 +101,43 @@ void fifoQueueEnqueue(fifoQueue *queue, PcbStr* pcb) {
 		nodeSetNext(queue->back, newNode);
 		queue->back = queue->back->next;
 	}
+
 	(queue->size)++;
 }
 
 
-PcbStr *fifoQueueDequeue(fifoQueue *queue) {
+PcbPtr fifoQueueDequeue(FifoQueue *queue) {
 	if (queue->head == NULL) {
 		printf("Queue is empty");
 		return NULL;
 	}
-	PcbStr * ret = queue->head->content;
+	PcbStr * ret = queue->head->content; //This ends up getting destroyed when destructing the Node holding it, so we instead make a copy.
 
 	Node * toDestroy = queue->head;
-	queue->head = queue->head->next;
-	nodeDeconstructor(toDestroy);
-
+	queue->head = queue->head->next; //Sets head to null when head points to the last Node
+	nodeDestructor(&toDestroy);
 	(queue->size)--;
 	return ret;
 }
 
 
-PcbPtr fifoQueuePeek(fifoQueue * queue) {
+PcbPtr fifoQueuePeek(FifoQueue * queue) {
 	if (queue->head == NULL) {
 		return NULL;
 	}
 	return queue->head->content;
 }
 
-int fifoQueueIsEmpty(fifoQueue * queue) {
+int fifoQueueIsEmpty(FifoQueue * queue) {
 	return (queue->head == NULL);
 }
 
+/*Returns the number of bytes needed for a fifoQueue.*/
 int fifoQueueSize() {
-	return sizeof(fifoQueue);
+	return sizeof(FifoQueue);
 }
 
-char *fifoQueueToString(fifoQueue * queue) {
+char * fifoQueueToString(FifoQueue * queue) {
 	char * string = malloc(sizeof(char) * (queue->size * 4 + 50));
 	string[0]='\0';
 	strncat(string, "Q: ", 5);
@@ -150,7 +152,7 @@ char *fifoQueueToString(fifoQueue * queue) {
 	for (i = 1; i <= queue->size; i++) {
 		char s[5] = "P";
 		int j = front->content->ID;
-		int numWritten = sprintf(s + 1, "%d", j); //For i > 9, we go into ascii vals above val for char '9'
+		int numWritten = sprintf(s + 1, "%d", j);
 		s[numWritten + 1] = '-';
 		strncat(string, s, 5);
 		front = front->next;

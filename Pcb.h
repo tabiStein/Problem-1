@@ -76,7 +76,7 @@ int PCBGetID(PcbPtr pcb);
  */
 PcbPtr PCBGetState(PcbPtr pcb);
 
-PcbPtr PCBNew();
+PcbPtr PCBConstructor();
 
 /**
  * Returns a string representation of this PCB.
@@ -86,6 +86,6 @@ char *PCBToString(PcbPtr pcb);
 /**
  * Deallocates all memory references that are kept within the PCB, and then frees the PCB passed in.
  */
-void PCBDestroy(PcbPtr pcb);
+void PCBDestructor(PcbPtr pcb);
 
 #endif /* PCB_H_ */
