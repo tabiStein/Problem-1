@@ -26,9 +26,9 @@
 
 int currPID;
 unsigned int sysStackPC;		// Renamed for clarity. Let me know if you have any disagreements, so that we can talk about it :)
-fifoQueue* newProcesses;
-fifoQueue* readyProcesses;
-fifoQueue* terminatedProcesses;
+FifoQueue* newProcesses;
+FifoQueue* readyProcesses;
+FifoQueue* terminatedProcesses;
 PcbPtr currProcess;
 
 /*Prepares the waiting process to be executed.*/
@@ -95,4 +95,3 @@ int main(void) {
 	printf("Done\n");
 	return 0;
 }
-
