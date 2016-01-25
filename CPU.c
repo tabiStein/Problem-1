@@ -113,7 +113,8 @@
 //		PcbPtr extraRef = currProcess;
 //		if (currPID % 4 == 0) {
 //			printf("Running PCB: %s\n", PCBToString(currProcess));
-//			printf("Switching to: %s\n", PCBToString(fifoQueuePeek(readyProcesses))); //Print head of readyProcesses
+//			if (readyProcesses->head != NULL)
+//				  printf("Switching to: %s\n", PCBToString(fifoQueuePeek(readyProcesses))); //Print head of readyProcesses
 //		}
 //		timerIsr();
 //		if (currPID % 4 == 0) {
