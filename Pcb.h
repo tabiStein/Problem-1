@@ -18,12 +18,12 @@
 #define PCB_H_
 
 typedef enum {
-	created,
-	running,
-	ready,
-	interrupted,
-	blocked,
-	terminated
+	created=0,
+	running=1,
+	ready=2,
+	interrupted=3,
+	blocked=4,
+	terminated=5
 } State;
 
 typedef struct PCB {
@@ -35,6 +35,9 @@ typedef struct PCB {
 
 
 typedef PcbStr * PcbPtr;
+
+/*Returns a string value for the given state.*/
+char* StateToString(State state);
 
 /**
  * Sets a new priority for this PCB.

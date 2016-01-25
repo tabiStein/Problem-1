@@ -19,13 +19,14 @@
 #include <string.h>
 #include <stdio.h>
 
-/*
-typedef struct {
-	int priority;
-	int ID;
-	struct PCB * next;
-} PCB;
-*/
+const char* stateNames[] = {"Created","Running","Ready","Interrupted","Blocked","Terminated"};
+
+/*char* StateToString(State state) {
+	int len = strlen(stateNames[state]);
+	char* string = malloc(sizeof(char) * len + 1);
+	sprintf(string, "%s", stateNames[state]); //auto appends null at end
+	return string;
+}*/
 
 void PCBSetPriority(PcbPtr pcb, int priority) {
 	pcb->priority = priority;
@@ -76,24 +77,18 @@ State PCBGetState(PcbPtr pcb) {
 	return pcb;
 }
 
+
 char *PCBToString(PcbPtr pcb) {
 	char * emptyStr = (char*) malloc(sizeof(char) * 100);
 	emptyStr[99] = '\0';
-	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, Next PCB ID: ", pcb->ID, pcb->priority);
-
-	char * nextIDString = (char*)malloc(sizeof(char) * 5);
-	sprintf(nextIDString, "NULL");
-
-	nextIDString = (char *) malloc(sizeof(char) * 100);
-	sprintf(nextIDString, "%d", pcb->state);
-
-	int addedLen = strlen(nextIDString);
-	char * retString = (char *) malloc(sizeof(char) * (lenNeeded + addedLen));
-	sprintf(retString, "%s %s", emptyStr, nextIDString);
+//	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %s",
+//							pcb->ID, pcb->priority, StateToString(pcb->state));
+	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %d",
+							pcb->ID, pcb->priority, pcb->state);
+	char * retString = (char *) malloc(sizeof(char) * lenNeeded);
+	sprintf(retString, "%s", emptyStr);
 	free(emptyStr);
-	free(nextIDString);
 	return retString;
-
 }
 
 void PCBDestructor(PcbPtr pcb) {
