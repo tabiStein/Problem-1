@@ -81,7 +81,7 @@ char* PCBGetState(PcbPtr pcb) {
 	PcbPtr pcb = (PcbPtr) malloc(sizeof(PcbStr));
 	pcb->ID = 1;
 	pcb->priority = 1;
-	pcb->state = ready;
+	pcb->state = created;
 
 	return pcb;
 }
