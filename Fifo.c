@@ -32,12 +32,11 @@ Node* nodeConstructor() {
  *there is still work to do with the contents.*/
 PcbPtr nodeDestructor(Node ** node) {
 	PcbPtr contents = (*node)->content;
-	Node*nextNode = (*node)->next;
 
 	free (*node);
 	*node = NULL; //Sets dangling pointer in calling function to NULL
 
-	return nextNode;
+	return contents;
 }
 
 void nodeSetNext(Node * node, Node * nextNode) {
