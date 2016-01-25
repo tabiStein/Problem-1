@@ -68,17 +68,11 @@ void fifoQueueDestructor(FifoQueue ** queue_p) {
 			Node * curr = (*queue_p)->head;
 			Node * curr2 = (*queue_p)->head->next;
 			while (curr2 != (*queue_p)->back) {
-
-				printf("while loop\n");
-
 				PcbPtr toDestroy = nodeDestructor(&curr);
 				PCBDestructor(toDestroy);
 				curr = curr2;
 				curr2 = curr2->next;
 			}
-
-			printf("outside while\n");
-
 			PcbPtr toDestroy = nodeDestructor(&curr);
 			PCBDestructor(toDestroy);
 			toDestroy = nodeDestructor(&curr2);
