@@ -63,8 +63,17 @@ int PCBGetID(PcbPtr pcb) {
 	return pcb->ID;
 }
 
-State PCBGetState(PcbPtr pcb) {
-	return pcb->state;
+char* PCBGetState(PcbPtr pcb) {
+	State myState = pcb->state;
+	switch (myState){
+		case created: return "Created";
+		case running: return "Running";
+		case ready: return "Ready";
+		case interrupted: return "Interrupted";
+		case blocked: return "Blocked";
+		case terminated: return "Terminated";
+	}
+	return "No State";
 }
 
 
@@ -86,8 +95,8 @@ char *PCBToString(PcbPtr pcb) {
 	emptyStr[99] = '\0';
 //	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %s",
 //							pcb->ID, pcb->priority, StateToString(pcb->state));
-	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %d",
-							pcb->ID, pcb->priority, pcb->state);
+	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %s",
+							pcb->ID, pcb->priority, PCBGetState(pcb));
 	char * retString = (char *) malloc(sizeof(char) * lenNeeded);
 	sprintf(retString, "%s", emptyStr);
 	free(emptyStr);

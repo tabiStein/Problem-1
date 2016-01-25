@@ -77,7 +77,7 @@ int PCBGetID(PcbPtr pcb);
 /**
  * Returns the state of this PCB.
  */
-State PCBGetState(PcbPtr pcb);
+char* PCBGetState(PcbPtr pcb);
 
 PcbPtr PCBConstructor();
 
