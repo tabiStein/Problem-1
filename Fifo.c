@@ -32,7 +32,6 @@ Node* nodeConstructor() {
  *there is still work to do with the contents.*/
 PcbPtr nodeDestructor(Node ** node) {
 	PcbPtr contents = (*node)->content;
-
 	free (*node);
 	*node = NULL; //Sets dangling pointer in calling function to NULL
 
@@ -52,31 +51,36 @@ FifoQueue * fifoQueueConstructor() {
 }
 
 void fifoQueueDestructor(FifoQueue ** queue_p) {
-	if ((*queue_p)->head != NULL) {
-		if ((*queue_p)->head->content == (*queue_p)->back->content)
-			//Pass a pointer to the head Node in the queue that queue_p points to:
-			nodeDestructor(&((*queue_p)->head));
 
-		else {
+	//printf("fifoQueueDestructor queue size: %d\n", (queue_p)->size);
+
+
+	if ((*queue_p)->head != NULL) {
+	//if ((*queue_p)->size != 0) {
+		if ((*queue_p)->head->content == (*queue_p)->back->content) {
+			//Pass a pointer to the head Node in the queue that queue_p points to:
+			PcbPtr toDestroy = nodeDestructor(&((*queue_p)->head));
+			PCBDestructor(toDestroy);
+
+		}else {
 			Node * curr = (*queue_p)->head;
 			Node * curr2 = (*queue_p)->head->next;
-			//PcbStr * curr = queue->head;
-			//PcbStr * curr2 = queue->head->next;
 			while (curr2 != (*queue_p)->back) {
-				//Destroy(curr);
-				nodeDestructor(&curr);
+				PcbPtr toDestroy = nodeDestructor(&curr);
+				PCBDestructor(toDestroy);
 				curr = curr2;
 				curr2 = curr2->next;
 			}
-			nodeDestructor(&curr);
-			nodeDestructor(&curr2);
-			//Destroy(curr);
-			//Destroy(curr2);
+			PcbPtr toDestroy = nodeDestructor(&curr);
+			PCBDestructor(toDestroy);
+			toDestroy = nodeDestructor(&curr2);
+			PCBDestructor(toDestroy);
 		}
 		(*queue_p)->size = 0;
 		free(*queue_p);
 		*queue_p = NULL; //Only local
 	}
+
 }
 
 void fifoQueueEnqueue(FifoQueue *queue, PcbStr* pcb) {
@@ -110,11 +114,11 @@ PcbPtr fifoQueueDequeue(FifoQueue *queue) {
 		printf("Queue is empty");
 		return NULL;
 	}
-	PcbStr * ret = queue->head->content; //This ends up getting destroyed when destructing the Node holding it, so we instead make a copy.
+	//PcbStr * ret = queue->head->content; //This ends up getting destroyed when destructing the Node holding it, so we instead make a copy.
 
 	Node * toDestroy = queue->head;
 	queue->head = queue->head->next; //Sets head to null when head points to the last Node
-	nodeDestructor(&toDestroy);
+	PcbStr * ret = nodeDestructor(&toDestroy);
 	(queue->size)--;
 	return ret;
 }
