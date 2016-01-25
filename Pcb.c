@@ -79,6 +79,9 @@ State PCBGetState(PcbPtr pcb) {
 
 
 char *PCBToString(PcbPtr pcb) {
+	if (pcb == NULL) 
+		return NULL;
+		
 	char * emptyStr = (char*) malloc(sizeof(char) * 100);
 	emptyStr[99] = '\0';
 //	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %s",
@@ -95,24 +98,3 @@ void PCBDestructor(PcbPtr pcb) {
 	free (pcb);
 	pcb = NULL;	//Only locally sets the pointer to null
 }
-
-/*
-int main() {
-	PCB * pcb1;
-	pcb1 = newPCB();
-	pcb1->ID = 123;
-	pcb1->priority = 3;
-
-	PCB * pcb2;
-	pcb2 = newPCB();
-	pcb2->ID = 456;
-	pcb2->priority = 5;
-
-	pcb1->next = pcb2;
-
-	printf("%s\n",toString(pcb1));
-
-	return 0;
-}
-
-*/
