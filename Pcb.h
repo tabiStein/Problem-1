@@ -54,7 +54,7 @@ void PCBSetState(PcbPtr pcb, State newState);
 /**
  * Sets the PC for this PCB.
  */
-void PCBSetState(PcbPtr pcb, unsigned int newPC);
+void PCBSetPC(PcbPtr pcb, unsigned int newPC);
 
 /**
  * Returns PC of this PCB.
@@ -74,9 +74,9 @@ int PCBGetID(PcbPtr pcb);
 /**
  * Returns the state of this PCB.
  */
-PcbPtr PCBGetState(PcbPtr pcb);
+State PCBGetState(PcbPtr pcb);
 
-PcbPtr PCBNew();
+PcbPtr PCBConstructor();
 
 /**
  * Returns a string representation of this PCB.
@@ -86,6 +86,6 @@ char *PCBToString(PcbPtr pcb);
 /**
  * Deallocates all memory references that are kept within the PCB, and then frees the PCB passed in.
  */
-void PCBDestroy(PcbPtr pcb);
+void PCBDestructor(PcbPtr pcb);
 
 #endif /* PCB_H_ */

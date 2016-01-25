@@ -62,7 +62,12 @@ int PCBGetID(PcbPtr pcb) {
 	return pcb->ID;
 }
 
- PcbPtr PCBNew(){
+State PCBGetState(PcbPtr pcb) {
+	return pcb->state;
+}
+
+
+ PcbPtr PCBConstructor(){
 	PcbPtr pcb = (PcbPtr) malloc(sizeof(PcbStr));
 	pcb->ID = 1;
 	pcb->priority = 1;
@@ -91,11 +96,9 @@ char *PCBToString(PcbPtr pcb) {
 
 }
 
-void PCBDestroy(PcbPtr pcb) {
-	//free (pcb->ID);
-	//free (pcb->priority);
+void PCBDestructor(PcbPtr pcb) {
 	free (pcb);
-	pcb = NULL;
+	pcb = NULL;	//Only locally sets the pointer to null
 }
 
 /*

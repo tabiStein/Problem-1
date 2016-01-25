@@ -25,20 +25,20 @@
 #define PRIORITY_LEVELS 16
 
 int currPID;
-int sysStackPC;		// Renamed for clarity. Let me know if you have any disagreements, so that we can talk about it :)
-fifoQueue* newProcesses;
-fifoQueue* readyProcesses;
-fifoQueue* terminatedProcesses;
+unsigned int sysStackPC;		// Renamed for clarity. Let me know if you have any disagreements, so that we can talk about it :)
+FifoQueue* newProcesses;
+FifoQueue* readyProcesses;
+FifoQueue* terminatedProcesses;
 PcbPtr currProcess;
 
 /*Prepares the waiting process to be executed.*/
 void dispatcher() {
 	// Let me know if you think I've misinterpreted the directions (which is entirely possible) :)
 	
-	// pcb_setPC(currProcess, sysStackPC);							// TO BE IMPLEMENTED
+	PCBSetPC(currProcess, sysStackPC);
 	currProcess = fifoQueueDequeue(readyProcesses);
-	// pcb_setState(currProcess, RUNNING);							// TO BE IMPLEMENTED
-	// sysStackPC = pcb_getPC(currProcess);							// TO BE IMPLEMENTED
+	PCBSetState(currProcess, running);
+	sysStackPC = PCBGetPC(currProcess);
 }
 
 /*Based on the type of interrupt indicated,
@@ -65,7 +65,7 @@ void genProcesses() {
 			currPID++;
 			PCBSetID(newProc, currPID);
 			PCBSetPriority(newProc, rand() % PRIORITY_LEVELS);
-			//pcb_setState(newProc, CREATED);						// TO BE IMPLEMENTED
+			PCBSetState(newProc, created);
 			fifoQueueEnqueue(newProcesses, newProc);
 		}
 	}
@@ -77,10 +77,12 @@ void writeToFile(FILE* filePtr, char* string) {
 }
 
 int main(void) {
+	currPID = 0;
+	sysStackPC = 0;
 	newProcesses = fifoQueueConstructor();
 	readyProcesses = fifoQueueConstructor();
 	terminatedProcesses = fifoQueueConstructor();
-	currPID = 0;
+	currProcess = NULL;
 	
 	/*
 	 * Fill in code here!! \(^o^)/
@@ -89,7 +91,7 @@ int main(void) {
 	fifoQueueDestructor(newProcesses);
 	fifoQueueDestructor(readyProcesses);
 	fifoQueueDestructor(terminatedProcesses);
-	printf("Done");
+	PCBDestroy(currProcess);
+	printf("Done\n");
 	return 0;
 }
-
