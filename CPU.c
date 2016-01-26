@@ -23,6 +23,7 @@
 //#define TIMER 1
 //#define NEW_PROCS 5
 //#define PRIORITY_LEVELS 16
+//#define ROUNDS_TO_PRINT 4 // the number of rounds to wait before printing simulation data
 //#define SIMULATION_END 30 //the minimum number of processes before the simulation may end
 //#define MIN_PC_INCREMENT 3000
 //#define PC_INCREMENT_RANGE 1000
@@ -36,9 +37,6 @@
 //
 ///*Prepares the waiting process to be executed.*/
 //void dispatcher() {
-//	// Let me know if you think I've misinterpreted the directions (which is entirely possible) :)
-//
-//	PCBSetPC(currProcess, sysStackPC);
 //	currProcess = fifoQueueDequeue(readyProcesses);
 //	PCBSetState(currProcess, running);
 //	sysStackPC = PCBGetPC(currProcess);
@@ -111,13 +109,13 @@
 //		PCRegister += (rand() % PC_INCREMENT_RANGE) + MIN_PC_INCREMENT;
 //		sysStackPC = PCRegister;
 //		PcbPtr extraRef = currProcess;
-//		if (currPID % 4 == 0) {
+//		if (currPID % ROUNDS_TO_PRINT == 0) {
 //			printf("Running PCB: %s\n", PCBToString(currProcess));
 //			if (readyProcesses->head != NULL)
 //				  printf("Switching to: %s\n", PCBToString(fifoQueuePeek(readyProcesses))); //Print head of readyProcesses
 //		}
 //		timerIsr();
-//		if (currPID % 4 == 0) {
+//		if (currPID % ROUNDS_TO_PRINT == 0) {
 //			printf("After ISR:\n%s\n", PCBToString(extraRef));
 //			printf("%s\n", PCBToString(currProcess));
 //			printf("%s\n", fifoQueueToString(readyProcesses));
