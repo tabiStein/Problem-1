@@ -98,8 +98,10 @@ char *PCBToString(PcbPtr pcb) {
 		
 	char * emptyStr = (char*) malloc(sizeof(char) * 100);
 	emptyStr[99] = '\0';
+	char* stateString = StateToString(pcb->state);
 	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %s, PC: %d",
-							pcb->ID, pcb->priority, StateToString(pcb->state), pcb->PC);
+							pcb->ID, pcb->priority, stateString, pcb->PC);
+	free(stateString);
 //	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %d", //comment in for printing int value
 //							pcb->ID, pcb->priority, pcb->state);
 
