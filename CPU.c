@@ -39,12 +39,6 @@ PcbPtr currProcess;
 
 /*Prepares the waiting process to be executed.*/
 void dispatcher() {
-	int i;
-	for (i = 0; i < newProcesses->size; i++) { //do in scheduler instead
-		PcbPtr pcb = fifoQueueDequeue(newProcesses);
-		PCBSetState(pcb, ready);
-		fifoQueueEnqueue(readyProcesses, pcb);
-	}
 	currProcess = fifoQueueDequeue(readyProcesses);
 	PCBSetState(currProcess, running);
 	sysStackPC = PCBGetPC(currProcess);
@@ -54,16 +48,28 @@ void dispatcher() {
   decides what to do with the current process.*/
 void scheduler(int interruptType) {
 	if (interruptType == TIMER) {
+		//Get new processes into ready queue
+		int i;
+		for (i = 0; i < newProcesses->size; i++) {
+			PcbPtr pcb = fifoQueueDequeue(newProcesses);
+			PCBSetState(pcb, ready);
+			fifoQueueEnqueue(readyProcesses, pcb);
+		}
 		fifoQueueEnqueue(readyProcesses, currProcess);
 		PCBSetState(currProcess, ready);
 		dispatcher();
 	}
 }
 
+/*Saves the state of the CPU to the currently running PCB.*/
+void saveCpuToPcb() {
+	PCBSetPC(currProcess, sysStackPC);
+}
+
 /*The interrupt service routine for a timer interrupt.*/
 void timerIsr() {
+	saveCpuToPcb();
 	PCBSetState(currProcess, interrupted);
-	PCBSetPC(currProcess, sysStackPC); //Or to do in dispatcher?
 	scheduler(TIMER);
 }
 
@@ -120,18 +126,19 @@ int main(void) {
 		PcbPtr extraRef = currProcess;
 
 		if (numContextSwitches % ROUNDS_TO_PRINT == 0) {
-			printf("Num dispatched %d\n", numContextSwitches); //test
+			printf("Number of PCBs dispatched so far: %d\n", numContextSwitches); //test
 			printf("Running PCB: %s\n", PCBToString(currProcess));
-			if (readyProcesses->head != NULL) //use peek instead?
-				  printf("Switching to: %s\n", PCBToString(fifoQueuePeek(readyProcesses))); //Print head of readyProcesses
+			if (fifoQueuePeek(readyProcesses) != NULL) {
+				printf("Switching to: %s\n", PCBToString(fifoQueuePeek(readyProcesses))); //Print head of readyProcesses
+			}
 		}
 		timerIsr();
 		if (numContextSwitches % ROUNDS_TO_PRINT == 0) {
 			printf("After ISR: %s\n", PCBToString(extraRef));
 			printf("Now running PCB: %s\n", PCBToString(currProcess));
 			printf("Ready Queue: %s\n\n", fifoQueueToString(readyProcesses));
-
 		}
+
 		PCRegister = sysStackPC;
 		numContextSwitches++;
 	}
