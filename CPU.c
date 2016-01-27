@@ -23,10 +23,13 @@
 #define TIMER 1
 #define NEW_PROCS 5
 #define PRIORITY_LEVELS 16
+#define ROUNDS_TO_PRINT 4 // the number of rounds to wait before printing simulation data
 #define SIMULATION_END 30 //the minimum number of processes before the simulation may end
 #define MIN_PC_INCREMENT 3000
 #define PC_INCREMENT_RANGE 1000
 
+
+//Global variables
 int currPID; //The number of processes created so far. The latest process has this as its ID.
 unsigned int sysStackPC;
 FifoQueue* newProcesses;
@@ -36,9 +39,12 @@ PcbPtr currProcess;
 
 /*Prepares the waiting process to be executed.*/
 void dispatcher() {
-	// Let me know if you think I've misinterpreted the directions (which is entirely possible) :)
-
-	PCBSetPC(currProcess, sysStackPC);
+	int i;
+	for (i = 0; i < newProcesses->size; i++) { //do in scheduler instead
+		PcbPtr pcb = fifoQueueDequeue(newProcesses);
+		PCBSetState(pcb, ready);
+		fifoQueueEnqueue(readyProcesses, pcb);
+	}
 	currProcess = fifoQueueDequeue(readyProcesses);
 	PCBSetState(currProcess, running);
 	sysStackPC = PCBGetPC(currProcess);
@@ -106,22 +112,28 @@ int main(void) {
 	currPID++;
 	PCRegister = currProcess->PC;
 
+	int numContextSwitches = 0;
 	while (currPID <= SIMULATION_END) {
 		genProcesses();
 		PCRegister += (rand() % PC_INCREMENT_RANGE) + MIN_PC_INCREMENT;
 		sysStackPC = PCRegister;
 		PcbPtr extraRef = currProcess;
-		if (currPID % 4 == 0) {
+
+		if (numContextSwitches % ROUNDS_TO_PRINT == 0) {
+			printf("Num dispatched %d\n", numContextSwitches); //test
 			printf("Running PCB: %s\n", PCBToString(currProcess));
-			printf("Switching to: %s\n", PCBToString(fifoQueuePeek(readyProcesses))); //Print head of readyProcesses
+			if (readyProcesses->head != NULL) //use peek instead?
+				  printf("Switching to: %s\n", PCBToString(fifoQueuePeek(readyProcesses))); //Print head of readyProcesses
 		}
 		timerIsr();
-		if (currPID % 4 == 0) {
-			printf("After ISR:\n%s\n", PCBToString(extraRef));
-			printf("%s\n", PCBToString(currProcess));
-			printf("%s\n", fifoQueueToString(readyProcesses));
+		if (numContextSwitches % ROUNDS_TO_PRINT == 0) {
+			printf("After ISR: %s\n", PCBToString(extraRef));
+			printf("Now running PCB: %s\n", PCBToString(currProcess));
+			printf("Ready Queue: %s\n\n", fifoQueueToString(readyProcesses));
+
 		}
 		PCRegister = sysStackPC;
+		numContextSwitches++;
 	}
 
 	fifoQueueDestructor(&newProcesses);
