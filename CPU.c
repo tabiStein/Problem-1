@@ -19,7 +19,6 @@
 #include <time.h>
 #include "Pcb.h"
 #include "Fifo.h"
-#include "CPU.h"
 
 #define TIMER 1
 #define NEW_PROCS 5
