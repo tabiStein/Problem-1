@@ -28,6 +28,7 @@
 #define MIN_PC_INCREMENT 3000
 #define PC_INCREMENT_RANGE 1000
 
+
 //Global variables
 int currPID; //The number of processes created so far. The latest process has this as its ID.
 unsigned int sysStackPC;
@@ -35,17 +36,10 @@ FifoQueue* newProcesses;
 FifoQueue* readyProcesses;
 FifoQueue* terminatedProcesses;
 PcbPtr currProcess;
+FILE* outFilePtr;
 
 /*Prepares the waiting process to be executed.*/
 void dispatcher() {
-	//printf("\nDispatcher\n");
-	int i;
-	for (i = 0; i < newProcesses->size; i++) {
-		PcbPtr pcb = fifoQueueDequeue(newProcesses);
-		PCBSetState(pcb, ready);
-		fifoQueueEnqueue(readyProcesses, pcb);
-	}
-
 	currProcess = fifoQueueDequeue(readyProcesses);
 	PCBSetState(currProcess, running);
 	sysStackPC = PCBGetPC(currProcess);
@@ -55,21 +49,32 @@ void dispatcher() {
   decides what to do with the current process.*/
 void scheduler(int interruptType) {
 	if (interruptType == TIMER) {
-
-		//printf("\nScheduler\n");
-
+		//Get new processes into ready queue
+		printf("\n");
+		int i;
+		for (i = 0; i < newProcesses->size; i++) {
+			PcbPtr pcb = fifoQueueDequeue(newProcesses);
+			PCBSetState(pcb, ready);
+			fifoQueueEnqueue(readyProcesses, pcb);
+			//fprintf(filePtr, "%s", PCBToString(pcb));
+			printf("ready PCB: %s\n", PCBToString(pcb));
+		}
+		printf("\n");
 		fifoQueueEnqueue(readyProcesses, currProcess);
 		PCBSetState(currProcess, ready);
 		dispatcher();
 	}
 }
 
+/*Saves the state of the CPU to the currently running PCB.*/
+void saveCpuToPcb() {
+	PCBSetPC(currProcess, sysStackPC);
+}
+
 /*The interrupt service routine for a timer interrupt.*/
 void timerIsr() {
-	//printf("\nISR\n");
-
+	saveCpuToPcb();
 	PCBSetState(currProcess, interrupted);
-	PCBSetPC(currProcess, sysStackPC); //Or to do in dispatcher?
 	scheduler(TIMER);
 }
 
@@ -97,7 +102,7 @@ void genProcesses() {
 
 /*Writes the given string to the given file*/
 void writeToFile(FILE* filePtr, char* string) {
-  fprintf(filePtr, "%s", string);
+	fprintf(filePtr, "%s", string);
 }
 
 int main(void) {
@@ -118,23 +123,30 @@ int main(void) {
 	currPID++;
 	PCRegister = currProcess->PC;
 
+	int numContextSwitches = 0;
 	while (currPID <= SIMULATION_END) {
 		genProcesses();
 		PCRegister += (rand() % PC_INCREMENT_RANGE) + MIN_PC_INCREMENT;
 		sysStackPC = PCRegister;
 		PcbPtr extraRef = currProcess;
-		if (currPID % ROUNDS_TO_PRINT == 0) {
+
+		if (numContextSwitches % ROUNDS_TO_PRINT == 0) {
+			printf("Number cycles so far: %d\n", numContextSwitches); //test
 			printf("Running PCB: %s\n", PCBToString(currProcess));
-			if (readyProcesses->head != NULL)
-				  printf("Switching to: %s\n", PCBToString(fifoQueuePeek(readyProcesses))); //Print head of readyProcesses
+			if (fifoQueuePeek(readyProcesses) != NULL) {
+				printf("Switching to: %s\n", PCBToString(fifoQueuePeek(readyProcesses))); //Print head of readyProcesses
+			}
 		}
 		timerIsr();
-		if (currPID % ROUNDS_TO_PRINT == 0) {
+		if (numContextSwitches % ROUNDS_TO_PRINT == 0) {
 			printf("After ISR: %s\n", PCBToString(extraRef));
 			printf("Now running PCB: %s\n", PCBToString(currProcess));
-			printf("Ready Queue: %s\n\n", fifoQueueToString(readyProcesses));
+			printf("Ready Queue: %s\n", fifoQueueToString(readyProcesses));
+			printf("Number of PCBs created so far: %d\n\n", currPID);
 		}
+
 		PCRegister = sysStackPC;
+		numContextSwitches++;
 	}
 
 	fifoQueueDestructor(&newProcesses);
