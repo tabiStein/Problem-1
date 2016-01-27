@@ -95,8 +95,8 @@ char *PCBToString(PcbPtr pcb) {
 	emptyStr[99] = '\0';
 //	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %s",
 //							pcb->ID, pcb->priority, StateToString(pcb->state));
-	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %s",
-							pcb->ID, pcb->priority, PCBGetState(pcb));
+	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %s, PC: %d",
+							pcb->ID, pcb->priority, PCBGetState(pcb), pcb->PC);
 	char * retString = (char *) malloc(sizeof(char) * lenNeeded);
 	sprintf(retString, "%s", emptyStr);
 	free(emptyStr);
