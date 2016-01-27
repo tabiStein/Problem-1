@@ -36,6 +36,7 @@ FifoQueue* newProcesses;
 FifoQueue* readyProcesses;
 FifoQueue* terminatedProcesses;
 PcbPtr currProcess;
+FILE* outFilePtr;
 
 /*Prepares the waiting process to be executed.*/
 void dispatcher() {
@@ -95,13 +96,14 @@ void genProcesses() {
 	}
 }
 
-/*Writes the given string to the given file*/
-void writeToFile(FILE* filePtr, char* string) {
-  fprintf(filePtr, "%s", string);
-}
+///*Writes the given string to the given file*/
+//void writeToFile(FILE* filePtr, const char* string) {
+//  fprintf(filePtr, "%s", string);
+//}
 
 int main(void) {
 	srand(time(NULL));
+	outFilePtr = fopen("scheduleTrace.txt", "w");
 	currPID = 0;
 	sysStackPC = 0;
 	newProcesses = fifoQueueConstructor();
@@ -128,15 +130,25 @@ int main(void) {
 		if (numContextSwitches % ROUNDS_TO_PRINT == 0) {
 			printf("Number of PCBs dispatched so far: %d\n", numContextSwitches); //test
 			printf("Running PCB: %s\n", PCBToString(currProcess));
+			fprintf(outFilePtr, "Number of PCBs dispatched so far: %d\n", numContextSwitches);
+			fprintf(outFilePtr, "Running PCB: %s\n", PCBToString(currProcess));
+
 			if (fifoQueuePeek(readyProcesses) != NULL) {
-				printf("Switching to: %s\n", PCBToString(fifoQueuePeek(readyProcesses))); //Print head of readyProcesses
+				printf("Switching to: %s\n", PCBToString(fifoQueuePeek(readyProcesses)));
+				fprintf(outFilePtr, "Switching to: %s\n", PCBToString(fifoQueuePeek(readyProcesses))); //Print head of readyProcesses
 			}
 		}
 		timerIsr();
 		if (numContextSwitches % ROUNDS_TO_PRINT == 0) {
 			printf("After ISR: %s\n", PCBToString(extraRef));
 			printf("Now running PCB: %s\n", PCBToString(currProcess));
-			printf("Ready Queue: %s\n\n", fifoQueueToString(readyProcesses));
+			printf("Ready Queue: %s\n", fifoQueueToString(readyProcesses));
+			printf("Num processes created so far: %d\n\n", currPID);
+			//tofile
+			fprintf(outFilePtr, "After ISR: %s\n", PCBToString(extraRef));
+			fprintf(outFilePtr, "Now running PCB: %s\n", PCBToString(currProcess));
+			fprintf(outFilePtr, "Ready Queue: %s\n", fifoQueueToString(readyProcesses));
+			fprintf(outFilePtr, "Num processes created so far: %d\n\n", currPID);
 		}
 
 		PCRegister = sysStackPC;
@@ -147,6 +159,7 @@ int main(void) {
 	fifoQueueDestructor(&readyProcesses);
 	fifoQueueDestructor(&terminatedProcesses);
 	PCBDestructor(currProcess);
+	fclose(outFilePtr);
 	printf("Done\n");
 	return 0;
 }
