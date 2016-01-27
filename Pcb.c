@@ -21,12 +21,12 @@
 
 const char* stateNames[] = {"Created","Running","Ready","Interrupted","Blocked","Terminated"};
 
-/*char* StateToString(State state) {
+char* StateToString(State state) {
 	int len = strlen(stateNames[state]);
 	char* string = malloc(sizeof(char) * len + 1);
 	sprintf(string, "%s", stateNames[state]); //auto appends null at end
 	return string;
-}*/
+}
 
 void PCBSetPriority(PcbPtr pcb, int priority) {
 	pcb->priority = priority;
@@ -67,24 +67,46 @@ State PCBGetState(PcbPtr pcb) {
 	return pcb->state;
 }
 
+/*
+char* PCBGetState(PcbPtr pcb) {
+	State myState = pcb->state;
+	switch (myState){
+		case created: return "Created";
+		case running: return "Running";
+		case ready: return "Ready";
+		case interrupted: return "Interrupted";
+		case blocked: return "Blocked";
+		case terminated: return "Terminated";
+	}
+	return "No State";
+}*/
+
 
  PcbPtr PCBConstructor(){
 	PcbPtr pcb = (PcbPtr) malloc(sizeof(PcbStr));
 	pcb->ID = 1;
 	pcb->priority = 1;
-	pcb->state = ready;
+	pcb->state = created;
 
 	return pcb;
 }
 
 
 char *PCBToString(PcbPtr pcb) {
+	if (pcb == NULL)
+		return NULL;
+
 	char * emptyStr = (char*) malloc(sizeof(char) * 100);
 	emptyStr[99] = '\0';
-//	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %s",
-//							pcb->ID, pcb->priority, StateToString(pcb->state));
+	char* stateString = StateToString(pcb->state);
 	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %s, PC: %d",
-							pcb->ID, pcb->priority, PCBGetState(pcb), pcb->PC);
+							pcb->ID, pcb->priority, stateString, pcb->PC);
+	free(stateString);
+//	int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %d", //comment in for printing int value
+//							pcb->ID, pcb->priority, pcb->state);
+
+	/*int lenNeeded = sprintf(emptyStr, "ID: %d, Priority: %d, State: %s, PC: %d",
+							pcb->ID, pcb->priority, PCBGetState(pcb), pcb->PC);*/ //Sean's
 	char * retString = (char *) malloc(sizeof(char) * lenNeeded);
 	sprintf(retString, "%s", emptyStr);
 	free(emptyStr);
