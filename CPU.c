@@ -55,6 +55,7 @@ void scheduler(int interruptType) {
 			PcbPtr pcb = fifoQueueDequeue(newProcesses);
 			PCBSetState(pcb, ready);
 			fifoQueueEnqueue(readyProcesses, pcb);
+			fprintf(outFilePtr, "%s\r\n", PCBToString(pcb));
 		}
 		fifoQueueEnqueue(readyProcesses, currProcess);
 		PCBSetState(currProcess, ready);
