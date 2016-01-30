@@ -121,7 +121,7 @@ int main(void) {
 	currPID++;
 	PCRegister = currProcess->PC;
 	
-	fprintf(outFilePtr, "%s", "Sean Markus\nWing-Sea Poon\nAbigail Smith\nTabi Stein\n\n");
+	fprintf(outFilePtr, "%s", "Sean Markus\r\nWing-Sea Poon\r\nAbigail Smith\r\nTabi Stein\r\n\r\n");
 
 	int numContextSwitches = 0;
 	while (currPID <= SIMULATION_END) {
@@ -131,27 +131,27 @@ int main(void) {
 		PcbPtr extraRef = currProcess;
 
 		if (numContextSwitches % ROUNDS_TO_PRINT == 0) {
-			printf("Number of PCBs dispatched so far: %d\n", numContextSwitches); //test
-			printf("Running PCB: %s\n", PCBToString(currProcess));
-			fprintf(outFilePtr, "Number of PCBs dispatched so far: %d\n", numContextSwitches);
-			fprintf(outFilePtr, "Running PCB: %s\n", PCBToString(currProcess));
+			printf("Number of PCBs dispatched so far: %d\r\n", numContextSwitches); //test
+			printf("Running PCB: %s\r\n", PCBToString(currProcess));
+			fprintf(outFilePtr, "Number of PCBs dispatched so far: %d\r\n", numContextSwitches);
+			fprintf(outFilePtr, "Running PCB: %s\r\n", PCBToString(currProcess));
 
 			if (fifoQueuePeek(readyProcesses) != NULL) {
-				printf("Switching to: %s\n", PCBToString(fifoQueuePeek(readyProcesses)));
-				fprintf(outFilePtr, "Switching to: %s\n", PCBToString(fifoQueuePeek(readyProcesses))); //Print head of readyProcesses
+				printf("Switching to: %s\r\n", PCBToString(fifoQueuePeek(readyProcesses)));
+				fprintf(outFilePtr, "Switching to: %s\r\n", PCBToString(fifoQueuePeek(readyProcesses))); //Print head of readyProcesses
 			}
 		}
 		timerIsr();
 		if (numContextSwitches % ROUNDS_TO_PRINT == 0) {
-			printf("After ISR: %s\n", PCBToString(extraRef));
-			printf("Now running PCB: %s\n", PCBToString(currProcess));
-			printf("Ready Queue: %s\n", fifoQueueToString(readyProcesses));
-			printf("Num processes created so far: %d\n\n", currPID);
+			printf("After ISR: %s\r\n", PCBToString(extraRef));
+			printf("Now running PCB: %s\r\n", PCBToString(currProcess));
+			printf("Ready Queue: %s\r\n", fifoQueueToString(readyProcesses));
+			printf("Num processes created so far: %d\r\n\r\n", currPID);
 			//tofile
-			fprintf(outFilePtr, "After ISR: %s\n", PCBToString(extraRef));
-			fprintf(outFilePtr, "Now running PCB: %s\n", PCBToString(currProcess));
-			fprintf(outFilePtr, "Ready Queue: %s\n", fifoQueueToString(readyProcesses));
-			fprintf(outFilePtr, "Num processes created so far: %d\n\n", currPID);
+			fprintf(outFilePtr, "After ISR: %s\r\n", PCBToString(extraRef));
+			fprintf(outFilePtr, "Now running PCB: %s\r\n", PCBToString(currProcess));
+			fprintf(outFilePtr, "Ready Queue: %s\r\n", fifoQueueToString(readyProcesses));
+			fprintf(outFilePtr, "Num processes created so far: %d\r\n\r\n", currPID);
 		}
 
 		PCRegister = sysStackPC;
@@ -163,6 +163,6 @@ int main(void) {
 	fifoQueueDestructor(&terminatedProcesses);
 	PCBDestructor(currProcess);
 	fclose(outFilePtr);
-	printf("Done\n");
+	printf("Done\r\n");
 	return 0;
 }
