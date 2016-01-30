@@ -120,6 +120,8 @@ int main(void) {
 	PCBSetState(currProcess, running);
 	currPID++;
 	PCRegister = currProcess->PC;
+	
+	fprintf(outFilePtr, "%s", "Sean Markus\nWing-Sea Poon\nAbigail Smith\nTabi Stein\n\n");
 
 	int numContextSwitches = 0;
 	while (currPID <= SIMULATION_END) {
