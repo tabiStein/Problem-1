@@ -31,6 +31,10 @@ typedef struct PCB {
 	unsigned int PC;
 	int ID;
 	State state;
+	int MAX_PC;
+	int TERMINATE;
+	int IO_1_TRAPS[4];
+	int IO_2_TRAPS[4];
 } PcbStr;
 
 

@@ -22,6 +22,7 @@
 
 #define TIMER 1
 #define IO 2
+#define IOTRAP 3
 #define NEW_PROCS 5
 #define PRIORITY_LEVELS 16
 #define ROUNDS_TO_PRINT 4 // the number of rounds to wait before printing simulation data
@@ -81,6 +82,17 @@ void scheduler(int interruptType, int numIO) {
 		currProcess = pcb;
 		PCBSetState(currProcess, running);
 	}
+	else if (interruptType == IOTRAP) {
+		//Put process into waiting queue
+		if (numIO == 1) {
+			fifoQueueEnqueue(wait_queue1, currProcess);
+		}
+		else if (numIO == 2) {
+			fifoQueueEnqueue(wait_queue2, currProcess);
+		}
+		//set new io waiting queue process to running
+		dispatcher();
+	}
 }
 
 /*Saves the state of the CPU to the currently running PCB.*/
@@ -103,9 +115,36 @@ void timerIsr() {
 	scheduler(TIMER, NULL);
 }
 
+/**
+ * Checks the trap array if PC value matches
+ * returns I/O 1 or I/O 2 if match 0 otherwise
+ */
+int trap_check(int CPU, PcbPtr *pcb) {
+	int i;
+	for (i = 0; i < 4; i++)  {
+		//When I/O cycle number % CPU == 0
+		if (pcb->IO_1_TRAPS[i] % CPU == 0) {
+			return 1;
+		}
+		if (pcb->IO_1_TRAPS[i] % CPU == 0) {
+			return 2;
+		}
+	}
+	return 0;
+}
+
+/**
+ * Puts running pcb into blocked state and into IO queue, calls scheduler
+ */
+void trap_service_handler(int numIO) {
+	saveCpuToPcb();
+		PCBSetState(currProcess, blocked);
+		scheduler(IOTRAP, NULL);
+		//TURN ON/ALERT IO CHECK THREAD HERE TO BEGIN COUNTDOWN
+}
+
 /*Randomly generates between 0 and 5 new processes and enqueues them to the New Processes Queue.*/
 void genProcesses() {
-
 	PcbPtr newProc;
 
 	int i;
