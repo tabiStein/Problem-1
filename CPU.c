@@ -129,7 +129,89 @@ void genProcesses() {
 //void writeToFile(FILE* filePtr, const char* string) {
 //  fprintf(filePtr, "%s", string);
 //}
+int main(void) {
+	srand(time(NULL));
+	outFilePtr = fopen("scheduleTrace.txt", "w");
+	currPID = 0;
+	sysStackPC = 0;
+	timerCount = 0;
+	unsigned int PCRegister;
+	newProcesses = fifoQueueConstructor();
+	readyProcesses = fifoQueueConstructor();
+	terminatedProcesses = fifoQueueConstructor();
+	waitQueue1 = fifoQueueConstructor();
+	waitQueue2 = fifoQueueConstructor();
 
+	//An initial process to start with
+	currProcess = PCBConstructor();
+	PCBSetPC(currProcess, rand());
+	PCBSetID(currProcess, currPID);
+	PCBSetPriority(currProcess, rand() % PRIORITY_LEVELS);
+	PCBSetState(currProcess, running);
+	currPID++;
+	PCRegister = currProcess->PC;
+
+	genProcesses();
+
+	int simCounter = 0;
+	while (simCounter <= SIMULATION_END) {
+		//check for timer interrupt, if so, call timerISR()
+		if (timerCheck() == 1) {
+			timerISR();
+		}
+
+		//check if there has been an IO interrupt, if so call appropriate ioISR
+		if (io1Check() == 1) {
+			//do something
+		}
+		if (io2Check() == 1) {
+			//do something
+		}
+
+		//check the current process's PC, if it is MAX_PC, set to 0 and increment TERM_COUNT
+		if (currProcess->PC == currProcess->MAX_PC) {
+			currProcess->TERM_COUNT++;
+
+			//if TERM_COUNT = TERMINATE, then call terminateISR to put this process in the terminated list
+			if (currProcess->TERM_COUNT == currProcess->TERMINATE) {
+				terminateISR();
+				continue;	//currProcess has been terminated, we don't want to execute the rest of the loop, instead jump to next iteration
+			}
+			currProcess->PC = 0;
+		}
+
+		//increment the current process's PC
+		currProcess->PC++;
+
+		//check the current process's PC to see if it's an I/O, if so, call ioISR on appropriate I/O device
+		if (currProcess->PC == currProcess->IO_1_TRAPS[0] ||
+				currProcess->PC == currProcess->IO_1_TRAPS[1] ||
+				currProcess->PC == currProcess->IO_1_TRAPS[2] ||
+				currProcess->PC == currProcess->IO_1_TRAPS[3]) {
+			IO_ISR(1);
+		} else if (currProcess->PC == currProcess->IO_2_TRAPS[0] ||
+				currProcess->PC == currProcess->IO_2_TRAPS[1] ||
+				currProcess->PC == currProcess->IO_2_TRAPS[2] ||
+				currProcess->PC == currProcess->IO_2_TRAPS[3]) {
+			IO_ISR(2);
+		}
+
+
+		//at end
+		simCounter++;
+	}
+
+	return 0;
+}
+
+
+
+//Writes the given string to the given file
+//void writeToFile(FILE* filePtr, const char* string) {
+//  fprintf(filePtr, "%s", string);
+//}
+
+/*
 int main(void) {
 	srand(time(NULL));
 	outFilePtr = fopen("scheduleTrace.txt", "w");
@@ -140,7 +222,7 @@ int main(void) {
 	terminatedProcesses = fifoQueueConstructor();
 	unsigned int PCRegister;
 
-	/*An initial process to start with*/
+	//An initial process to start with
 	currProcess = PCBConstructor();
 	PCBSetPC(currProcess, rand());
 	PCBSetID(currProcess, currPID);
@@ -148,7 +230,7 @@ int main(void) {
 	PCBSetState(currProcess, running);
 	currPID++;
 	PCRegister = currProcess->PC;
-	
+
 	fprintf(outFilePtr, "%s", "Sean Markus\r\nWing-Sea Poon\r\nAbigail Smith\r\nTabi Stein\r\n\r\n");
 
 	int numContextSwitches = 0;
@@ -194,3 +276,4 @@ int main(void) {
 	printf("Done\r\n");
 	return 0;
 }
+*/
