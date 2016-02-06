@@ -21,6 +21,7 @@
 #include "Fifo.h"
 
 #define TIMER 1
+#define IO 2
 #define NEW_PROCS 5
 #define PRIORITY_LEVELS 16
 #define ROUNDS_TO_PRINT 4 // the number of rounds to wait before printing simulation data
@@ -32,6 +33,8 @@
 //Global variables
 int currPID; //The number of processes created so far. The latest process has this as its ID.
 unsigned int sysStackPC;
+FifoQueue* wait_queue1;
+FifoQueue* wait_queue2;
 FifoQueue* newProcesses;
 FifoQueue* readyProcesses;
 FifoQueue* terminatedProcesses;
@@ -47,7 +50,7 @@ void dispatcher() {
 
 /*Based on the type of interrupt indicated,
   decides what to do with the current process.*/
-void scheduler(int interruptType) {
+void scheduler(int interruptType, int numIO) {
 	if (interruptType == TIMER) {
 		//Get new processes into ready queue
 		int i;
@@ -61,6 +64,23 @@ void scheduler(int interruptType) {
 		PCBSetState(currProcess, ready);
 		dispatcher();
 	}
+
+	else if (interruptType == IO) {
+		//Get process from waiting queue
+		PcbPtr pcb;
+		if (numIO == 1) {
+			pcb = fifoQueueDequeue(wait_queue1);
+		}
+		else if (numIO == 2) {
+			pcb = fifoQueueDequeue(wait_queue2);
+		}
+		//put current process into ready queue
+		fifoQueueEnqueue(readyProcesses, currProcess);
+		PCBSetState(currProcess, ready);
+		//set new io waiting queue process to running
+		currProcess = pcb;
+		PCBSetState(currProcess, running);
+	}
 }
 
 /*Saves the state of the CPU to the currently running PCB.*/
@@ -68,11 +88,19 @@ void saveCpuToPcb() {
 	PCBSetPC(currProcess, sysStackPC);
 }
 
+/*The interrupt service routine for a IO interrupt
+ * Does it still have to save Cpu state to Pcb? */
+void IO_ISR(int numIO) {
+	saveCpuToPcb();
+	PCBSetState(currProcess, interrupted);
+	scheduler(IO, numIO);
+}
+
 /*The interrupt service routine for a timer interrupt.*/
 void timerIsr() {
 	saveCpuToPcb();
 	PCBSetState(currProcess, interrupted);
-	scheduler(TIMER);
+	scheduler(TIMER, NULL);
 }
 
 /*Randomly generates between 0 and 5 new processes and enqueues them to the New Processes Queue.*/
