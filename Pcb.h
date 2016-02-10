@@ -16,7 +16,6 @@
 
 #ifndef PCB_H_
 #define PCB_H_
-
 #define NUM_IO_TRAPS 4
 
 typedef enum {
@@ -28,10 +27,12 @@ typedef enum {
 	terminated=5
 } State;
 
-
 typedef struct PCB* PcbPtr;
 
+/**Returns the trap at the given index in the trap array
+for the 1st IO device for the given pcb.*/
 unsigned int get_IO_1_Trap(PcbPtr pcb, int index);
+/**"" 2nd IO device*/
 unsigned int get_IO_2_Trap(PcbPtr pcb, int index);
 
 /*Returns a string value for the given state.*/

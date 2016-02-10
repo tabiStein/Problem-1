@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <time.h>
+#include <time.h> //Right now for the test main. Later for getting current time for "creation" field.
 
 const char* stateNames[] = {"Created","Running","Ready","Interrupted","Blocked","Terminated"};
 
@@ -53,6 +53,7 @@ unsigned int get_IO_2_Trap(PcbStr* pcb, int index) {
 	}
 }
 
+
 char* StateToString(State state) {
 	int len = strlen(stateNames[state]);
 	char* string = malloc(sizeof(char) * len + 1);
@@ -60,10 +61,12 @@ char* StateToString(State state) {
 	return string;
 }
 
+
 void PCBSetPriority(PcbStr* pcb, int priority) {
 	pcb->priority = priority;
 
 }
+
 
 void PCBSetID(PcbStr* pcb, int id) {
 	pcb->PID = id;
@@ -83,6 +86,7 @@ void PCBSetPC(PcbStr* pcb, unsigned int newPC) {
 /**
  * Returns PC of this PCB.
  */
+<<<<<<< HEAD
 unsigned int PCBGetPC(PcbStr* pcb) {
 	return pcb->PC;
 }
