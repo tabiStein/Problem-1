@@ -28,9 +28,16 @@ typedef enum {
 
 typedef struct PCB {
 	int priority;
-	unsigned int PC;
+	int PC;
 	int ID;
 	State state;
+	int MAX_PC;
+	double CREATION;
+	double TERMINATION;
+	int TERMINATE;
+	int TERM_COUNT;
+	int* IO_1_TRAPS;
+	int* IO_2_TRAPS;
 } PcbStr;
 
 
